@@ -3,18 +3,18 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Quantum Blog</title>
+<title>The Math Behind Quantum Algorithms | Quantum Blog</title>
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="Quantum Blog" />
+<meta property="og:title" content="The Math Behind Quantum Algorithms" />
 <meta property="og:locale" content="en_US" />
 <link rel="canonical" href="http://localhost:4000/" />
 <meta property="og:url" content="http://localhost:4000/" />
 <meta property="og:site_name" content="Quantum Blog" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Quantum Blog" />
+<meta property="twitter:title" content="The Math Behind Quantum Algorithms" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","headline":"Quantum Blog","name":"Quantum Blog","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebSite","headline":"The Math Behind Quantum Algorithms","name":"Quantum Blog","url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Quantum Blog" /></head>
 <body><header class="site-header" role="banner">
@@ -29,7 +29,7 @@
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/">The Math Behind Quantum Algorithms</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
@@ -37,30 +37,89 @@
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline"></h1>
+    <h1 class="post-title p-name" itemprop="name headline">The Math Behind Quantum Algorithms</h1>
     <p class="post-meta">
       <time class="dt-published" datetime="" itemprop="datePublished">
       </time></p>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+    <h2 id="introduction">Introduction:</h2>
 
-<p>Jekyll requires blog post files to be named according to the following format:</p>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
-<p><code class="language-plaintext highlighter-rouge">YEAR-MONTH-DAY-title.MARKUP</code></p>
+<h2 id="quantum-fourier-transform">Quantum Fourier Transform</h2>
 
-<p>Where <code class="language-plaintext highlighter-rouge">YEAR</code> is a four-digit number, <code class="language-plaintext highlighter-rouge">MONTH</code> and <code class="language-plaintext highlighter-rouge">DAY</code> are both two-digit numbers, and <code class="language-plaintext highlighter-rouge">MARKUP</code> is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Quantum_Fourier_transform">Quantum Fourier Transform (QFT) </a> transforms between the computational basis and the state in fourier basis. Here, the computational basis represents the Z-basis states \(\mid 0 \rangle\) and \(\mid 1 \rangle\) and the fourier basis represents the X-basis states \(\mid + \rangle\) and \(\mid - \rangle\).Now that we have talked about what the Quantum Fourier Transform is basically doing, lets get into the math.</p>
 
-<p>Jekyll also offers powerful support for code snippets:</p>
+<p>In general, the classical Fourier transform acts on a vector \((x_0, x_1, \ldots, x_{N-1}) \in \mathbb{C}^N\) and maps it to the vector \((y_0, y_1, \ldots, y_{N-1}) \in \mathbb{C}^N\) according to the formula</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
-<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+\[y_k =  \sum_{j=0}^{N-1} e^{2\pi ijk} x_j, \quad k = 0, 1, 2, \ldots, N-1.\]
 
-<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
+<p>This is simply a clever rephrasing of the formula for coefficients in a Fourier Series that we derive using complex analysis, and represents the Riemann sum step.</p>
+
+<p>From this it isn’t too hard to see the Quantum Fourier transform, which acts on the a quantum state</p>
+
+\[|x\rangle = \sum_{j=0}^{N-1} x_j |j\rangle\]
+
+<p>and maps it to the quantum state</p>
+
+\[\sum_{j=0}^{N-1} y_j |j\rangle\]
+
+<p>according to the formula</p>
+
+\[y_k = \frac{1}{\sqrt{N}} \sum_{j=0}^{N-1}  e^{\frac{2\pi ijk}{N}} x_j, \quad k = 0, 1, 2, \ldots, N-1.\]
+
+<p>Note that, the \(\frac{1}{\sqrt{N}}\) is a normalization constant so that the magnitude of the quantum vectors stays unitary. Also, note that we can connect the fraction \(\frac{2\pi i}{N}\) to something we commonly know as the N-th <a href="https://en.wikipedia.org/wiki/Root_of_unity">root of unity</a>.</p>
+
+<p>Using this defintion of the Fourier Transform lets try to derive the Quantum Fourier transform for some N!</p>
+
+<p>Firstly, lets define the state \(\mid x \rangle = \mid x_1 x_2 \ldots x_n\rangle\), for \(N=2^n\). We use n so that the Hilbert Space is exactly \(2^n\) dimensional. A Hilbert Space is a vector space over the complex numbers. We use 2 as the base because you only have two complex coordinates, making the Hilbert Space for one qubit \(C^2\). Then we can define</p>
+
+\[QFT\mid x \rangle = \frac{1}{\sqrt{N}} \sum_{y=0}^{N-1}  e^{\frac{2\pi iyj}{N}} \mid y \rangle\]
+
+<p>After substituting \(N=2^n\),</p>
+
+\[= \frac{1}{\sqrt{2^n}}  \sum_{y=0}^{N-1}  e^{\frac{2\pi iyj}{2^n}}\mid y \rangle\]
+
+<p>Rewriting in fractional bit notation,</p>
+
+\[= \frac{1}{\sqrt{2^n}}  \sum_{y=0}^{N-1}  e^{2\pi i(\sum_{k=0}^{n} \frac{y_k}{2^k})j}  \mid y_1,y_2 \ldots y_n \rangle\]
+
+\[= \frac{1}{\sqrt{2^n}}  \sum_{y=0}^{N-1} \prod_{k=1}^{n} e^{\frac{2\pi i y_kj}{2^k}}  \mid y_1,y_2 \ldots y_n \rangle\]
+
+<p>Because each \(y_k\) represents a bit,</p>
+
+\[= \frac{1}{\sqrt{2^n}} \sum_{y_1=0}^1 \sum_{y_2=0}^1 \cdots \sum_{y_n=0}^1 
+   \Bigl(\,\prod_{k=1}^{n} e^{\frac{2\pi i\,y_k\,j}{2^k}}\Bigr)\;\mid y_1,y_2,\ldots,y_n \rangle\]
+
+\[= \frac{1}{\sqrt{2^n}} 
+   \Bigl(\sum_{y_1=0}^1 e^{\frac{2\pi i\,y_1\,j}{2^1}}\mid y_1 \rangle\Bigr)\,
+   \Bigl(\sum_{y_2=0}^1 e^{\frac{2\pi i\,y_2\,j}{2^2}}\mid y_2 \rangle\Bigr)\,
+   \cdots\,
+   \Bigl(\sum_{y_n=0}^1 e^{\frac{2\pi i\,y_n\,j}{2^n}}\mid y_n \rangle\Bigr)\]
+
+<p>Because,</p>
+
+\[\sum_{y_k=0}^1 e^{\frac{2\pi i\,y_k\,j}{2^k}} \lvert y_k \rangle
+\;=\;
+\bigl(e^0 \lvert 0 \rangle\bigr)
+\;+\;
+\bigl(e^{\frac{2\pi i\,j}{2^k}} \lvert 1 \rangle\bigr)
+\;=\;
+\lvert 0 \rangle \;+\; e^{\frac{2\pi i\,j}{2^k}} \lvert 1 \rangle.\]
+
+\[QFT\mid x \rangle = \Bigl(\frac{\mid 0 \rangle + e^{\frac{2\pi i\,j}{2^1}}\,\mid 1 \rangle}{\sqrt{2}}\Bigr)
+  \;\otimes\;
+  \Bigl(\frac{\mid 0 \rangle + e^{\frac{2\pi i\,j}{2^2}}\,\mid 1 \rangle}{\sqrt{2}}\Bigr)
+  \;\otimes \cdots \otimes\;
+  \Bigl(\frac{\mid 0 \rangle + e^{\frac{2\pi i\,j}{2^n}}\,\mid 1 \rangle}{\sqrt{2}}\Bigr).\]
+
+<p>which can be confirmed by analyzing the Fourier Transform.</p>
+
+<p>Another property worth mentioning is that, when we encode a state \(\mid q \rangle\) on an \(n\) number of qubits, the first qubit rotates with a frequency of \(\frac{q}{2^n}\) around the z-axis. For example, if we encode the state \(\mid \tilde q \rangle\) on 3 qubits, the first qubit rotates \(\frac{5}{8} * 2 \pi\) radians and then the second qubit rotates  \(\frac{10}{8} * 2 \pi\) around the z-axis and so on. We can verify this by simulating it. Check out this <a href="https://github.com/Qiskit/textbook/blob/main/notebooks/ch-algorithms/quantum-fourier-transform.ipynb">link</a> for a really cool simulation.</p>
+
+<p>Now, lets get into the circuit to implement the Quantum Fourier Transform.</p>
 
 
   </div><a class="u-url" href="/" hidden></a>

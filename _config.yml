@@ -3,3 +3,12 @@ title: Quantum Blog
 theme: minima
 plugins:
   - jekyll-feed
+
+markdown: kramdown
+
+# Tell kramdown to send anything inside $$...$$ or \(...\) to MathJax
+kramdown:
+  input: GFM               # If you use GitHub-Flavored Markdown elsewhere
+  math_engine: mathjax     # “mathjax” means “don’t render it in Markdown—let MathJax do it in the browser”
+  math_engine_opts:
+    preview: false         # Turn off kramdown’s built-in preview; we rely on MathJax instead
