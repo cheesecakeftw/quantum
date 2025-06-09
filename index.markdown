@@ -6,9 +6,11 @@ title: The Math Behind Quantum Algorithms
 
 ## Introduction:
 
+
+
 ## Quantum Fourier Transform
 
-The [Quantum Fourier Transform (QFT)](https://en.wikipedia.org/wiki/Quantum_Fourier_transform) transforms between the computational basis and the state in fourier basis. Here, the computational basis represents the Z-basis states $$ \mid 0 \rangle$$ and $$ \mid 1 \rangle$$ and the fourier basis represents the X-basis states $$ \mid + \rangle$$ and $$ \mid - \rangle$$.Now that we have talked about what the Quantum Fourier Transform is basically doing, lets get into the math.
+The [Quantum Fourier Transform (QFT)](https://en.wikipedia.org/wiki/Quantum_Fourier_transform) transforms between the computational basis and the state in fourier basis. Here, the computational basis represents the Z-basis states $$ \mid 0 \rangle$$ and $$ \mid 1 \rangle$$ and the fourier basis represents the X-basis states $$ \mid + \rangle$$ and $$ \mid - \rangle$$. Now that we have talked about what the Quantum Fourier Transform is basically doing, lets get into the math.
 
 In general, the classical Fourier transform acts on a vector $$(x_0, x_1, \ldots, x_{N-1}) \in \mathbb{C}^N$$ and maps it to the vector $$(y_0, y_1, \ldots, y_{N-1}) \in \mathbb{C}^N$$ according to the formula
 
@@ -40,7 +42,7 @@ $$
 Note that, the $$\frac{1}{\sqrt{N}}$$ is a normalization constant so that the magnitude of the quantum vectors stays unitary. Also, note that we can connect the fraction $$\frac{2\pi i}{N}$$ to something we commonly know as the N-th [root of unity](https://en.wikipedia.org/wiki/Root_of_unity).
 
 
-Using this defintion of the Fourier Transform lets try to derive the Quantum Fourier transform for some N!
+Using this definition of the Fourier Transform lets try to derive the Quantum Fourier transform for some N!
 
 Firstly, lets define the state $$\mid x \rangle = \mid x_1 x_2 \ldots x_n\rangle$$, for $$N=2^n$$. We use n so that the Hilbert Space is exactly $$2^n$$ dimensional. A Hilbert Space is a vector space over the complex numbers. We use 2 as the base because you only have two complex coordinates, making the Hilbert Space for one qubit $$C^2$$. Then we can define 
 
@@ -123,7 +125,7 @@ $$
 R_k \mid 1 \rangle = e^{\frac{2\pi i}{2^k}} \mid 1 \rangle
 $$
 
-Visually we can represent the circut as:
+Visually we can represent the circuit as:
 
 <img 
   src="{{ "./Screenshot%202025-06-07%20at%2012.01.13 AM.png" | relative_url }}" 
@@ -131,7 +133,7 @@ Visually we can represent the circut as:
   class="my-responsive-class"
 />
 
-Let's see how does this circut work now! We start with an n qubit input state $$\mid x_1x_2\ldots x_n \rangle$$.
+Let's see how does this circuit work now! We start with an n qubit input state $$\mid x_1x_2\ldots x_n \rangle$$.
 
 Firstly, we apply the Hadamard gate to $$ \mid x_1 \rangle$$,
 
@@ -175,7 +177,7 @@ $$
 
 which is what we derived earlier for the $$2^n$$ qubits state generalization.
 
-Let us now try applying the Quantum Fourier Transform to a 3 qubit state $$\mid \psi\rangle = \mid q_0q_1q_2\rangle$$. The circiut can be visualized as:
+Let us now try applying the Quantum Fourier Transform to a 3 qubit state $$\mid \psi\rangle = \mid q_0q_1q_2\rangle$$. The circuit can be visualized as:
 
 <img 
   src="{{ "./Screenshot 2025-06-07 at 12.53.52 AM.png" | relative_url }}" 
@@ -252,7 +254,24 @@ $$
 QFT \mid x \rangle = \frac{1}{\sqrt{2^n}} \sum_{y=0}^{2^n - 1} e^{\frac{2\pi i x y}{2^n}} \mid y \rangle
 $$
 
+Lastly, let us consider the time complexity of the Quantum Fourier Transform. In the quantum circuit for the nn-qubit Fourier transform, each qubit $$k$$ (for $$k=1\ldots,n$$) is first acted on by a single Hadamard gate and then by a sequence of controlled-phase rotations controlled by that qubit and targeting each of the remaining $$(n−k)$$ qubits. Thus, qubit 1 requires one Hadamard plus (n−1)(n−1) controlled-phase gates, qubit 2 requires one Hadamard plus $$(n−2)$$ controlled-phase gates, and so on down to the last qubit, which needs only a Hadamard. Summing these gate we get
+
+$$
+[1 + (n - 1)] + [1 + (n - 2)] + \cdots + [1 + 0] = n + (n - 1) + \cdots + 1 = \frac{n(n + 1)}{2} = O(n^2).
+$$
+
+This shows that the time complexity is proportional to $$n^2$$ which is a quadratic polynomial of the number of qubits. Since the time complexity of the QFT is in polynomial time it is a smaller time complexity than the classical Fourier transform which is exponential.
+
+
 ## Shor's Algorithm
+
+[Shor's Algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm) is an algorithm used to find the prime factors of an integer. But why is this algorithm so famous in quantum computing? This algorithm has compelling applications such as cracking the most used encryption protocol, [RSA](https://en.wikipedia.org/wiki/RSA_cryptosystem), which functions on the assumption that the prime factors of an integer can't be found. This algorithm has evidence of super-polynomial speedup compared to the best known classical algorithms. However, as of right now our quantum computers aren't advanced enough to factor numbers of practical significance because of a lack of qubits. Also, the noise in quantum circuits requires additional qubits for quantum error correction adding to the impracticality of the algorithm right now. 
+
+Before we get into the math behind the algorithm, lets discuss the time complexity of Shor's Algorithm. To factor an integer $$N$$ on a quantum computer, Shor's algorithm runs in polynomial time. To be specific, it takes quantum gates of order $$O((\log N)^2 (\log \log N)(\log \log \log N))$$ using fast multiplication. However, we can achieve  $$O((\log N)^2 (\log \log N))$$ using the asymptomatically fastest multiplication algorithm. These are both significantly faster time complexities than the most efficient classical factoring algorithm, the general number sieve, which works in exponential time $$ O( e^{1.9 (\log N)^{1/3} (\log \log N)^{2/3}})$$. As $$N$$ increases exponential time algorithms slow down much much faster than polynomial time algorithms.
+
+
+
+
 
 
 
