@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>The Math Behind Shor’s Algorithm | Quantum Algorithms</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="The Math Behind Shor’s Algorithm" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/shor.html" />
+<meta property="og:url" content="http://localhost:4000/shor.html" />
+<meta property="og:site_name" content="Quantum Algorithms" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="The Math Behind Shor’s Algorithm" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"The Math Behind Shor’s Algorithm","url":"http://localhost:4000/shor.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Quantum Algorithms" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Quantum Algorithms</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/qft.html">Quantum Fourier Transforms</a><a class="page-link" href="/shor.html">The Math Behind Shor&#39;s Algorithm</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">The Math Behind Shor&#39;s Algorithm</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="" itemprop="datePublished">
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<h2 id="introduction">Introduction:</h2>
+
+<p><a href="https://en.wikipedia.org/wiki/Shor%27s_algorithm">Shor’s Algorithm</a> is an algorithm used to find the prime factors of an integer. But why is this algorithm so famous in quantum computing? This algorithm has compelling applications such as cracking the most used encryption protocol, <a href="https://en.wikipedia.org/wiki/RSA_cryptosystem">RSA</a>, which functions on the assumption that the prime factors of an integer can’t be found. This algorithm has evidence of super-polynomial speedup compared to the best known classical algorithms. However, as of right now our quantum computers aren’t advanced enough to factor numbers of practical significance because of a lack of qubits. Also, the noise in quantum circuits requires additional qubits for quantum error correction adding to the impracticality of the algorithm right now.</p>
+
+<p>Before we get into the math behind the algorithm, lets discuss the time complexity of Shor’s Algorithm. To factor an integer \(N\) on a quantum computer, Shor’s algorithm runs in polynomial time. To be specific, it takes quantum gates of order \(O((\log N)^2 (\log \log N)(\log \log \log N))\) using fast multiplication. However, we can achieve  \(O((\log N)^2 (\log \log N))\) using the asymptomatically fastest multiplication algorithm. These are both significantly faster time complexities than the most efficient classical factoring algorithm, the general number sieve, which works in exponential time \(O( e^{1.9 (\log N)^{1/3} (\log \log N)^{2/3}})\).</p>
+
+<p>It is important to note that this algorithm involves both classical and quantum parts. Specifically, the quantum speedup happens from the order-finding problem which we will explain and go into more detail about later.</p>
+
+<p>The goal of the algorithm, in mathematical terms, is to find primes \(P\) and \(Q\) for some \(N\), such that \(N=PQ\). For this algorithm to work we assume that \(N\) isn’t even, and \(N\) isn’t a prime or a prime power. We can check if \(N\) is prime or not using various <a href="https://en.wikipedia.org/wiki/Primality_test#Complexity">primality tests</a>, including the infamous Fermat’s little theorem.</p>
+
+<p>If \(N\) is even then we can use the trivial case \(P=2\), then \(Q=N/2\) which is straightforward.</p>
+
+<p>If \(N\) is a <a href="https://en.wikipedia.org/wiki/Prime_power">prime power</a>, we can check for every \(k\) such that \(2 \leq k \leq \log_3 N\) if \(N^{\frac{1}{k}}\) is an integer. If that happens to be the case, then \(P=N^{\frac{1}{k}}\) and \(Q=N^{\frac{k-1}{k}}\) which is again a trivial case.</p>
+
+<p>If none of these easy cases produce a nontrivial factor of $N$ then we proceed to use Shor’s Algorithm. Before we do that let us review some important mathematical concepts that we need to be familiar with.</p>
+
+<h3 id="mathematical-prerequisites">Mathematical Prerequisites</h3>
+
+<h4 id="euclidean-algorithm"><a href="https://en.wikipedia.org/wiki/Euclidean_algorithm">Euclidean Algorithm</a></h4>
+
+<p>The Euclidean Algorithm is one of the most efficient algorithms to find the \(GCD\) of two numbers \(a,b\). While, we won’t use the Euclidean algorithm in the quantum part, it will be used consistently in the classical part. Let \(a,b \in N\), \(b \neq 0\), \(a \geq b\). Then for \(r_{k+1}&lt;r_k&lt;r_{k-1}\) the Euclidean algorithm is then defined as</p>
+
+\[a = b \cdot q_1 + r_1 \\
+b = r_1 \cdot q_2 + r_2 \\
+r_1 = r_2 \cdot q_3 + r_3 \\
+\vdots \\
+r_{n-1} = r_n \cdot q_{n+1} + 0 \\\]
+
+<p>where \(r_n\) is \(GCD(a,b)\).</p>
+
+<p>This can also be represented as the continued fraction</p>
+
+\[\frac{a}{b} = q_1 + \cfrac{1}{q_2 + \cfrac{1}{\cdots + \cfrac{1}{q_n}}}\]
+
+<p>Note that the Euclidean Algorithm finds \(GCD(a,b)\) in at most \(\log(a)\) divisions.</p>
+
+<h4 id="the-multiplicative-group-mathbbznmathbbz"><a href="https://people.reed.edu/~jerry/361/lectures/lec07.pdf">The Multiplicative Group \((\mathbb{Z}/N\mathbb{Z})\)</a></h4>
+
+
+  </div><a class="u-url" href="/shor.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Quantum Algorithms</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Quantum Algorithms</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
