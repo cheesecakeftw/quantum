@@ -19,9 +19,13 @@ If $$N$$ is even then we can use the trivial case $$P=2$$, then $$Q=N/2$$ which 
 
 If $$N$$ is a [prime power](https://en.wikipedia.org/wiki/Prime_power), we can check for every $$k$$ such that $$2 \leq k \leq \log_3 N$$ if $$N^{\frac{1}{k}}$$ is an integer. If that happens to be the case, then $$P=N^{\frac{1}{k}}$$ and $$Q=N^{\frac{k-1}{k}}$$ which is again a trivial case.
 
-If none of these easy cases produce a nontrivial factor of $N$ then we proceed to use Shor's Algorithm. Before we do that let us review some important mathematical concepts that we need to be familiar with.
+If none of these easy cases produce a nontrivial factor of $$N$$ then we proceed to use Shor's Algorithm. Before we do that let us review some important mathematical concepts that we need to be familiar with.
 
-### Mathematical Prerequisites
+## Mathematical Prerequisites:
+
+#### [Basic Modular Arithmetic](https://en.wikipedia.org/wiki/Modular_arithmetic)
+
+For some $$a,b,r,N \in Z$$, we write $$a=b \times N +r$$. This can be written as $$a \equiv r \pmod{N}. $$ This can also be written as $$N \mid  (a-r)$$ which reads as "$$N$$ divides $$a-r$$".
 
 #### [Euclidean Algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm)
 
@@ -43,6 +47,74 @@ $$\frac{a}{b} = q_1 + \cfrac{1}{q_2 + \cfrac{1}{\cdots + \cfrac{1}{q_n}}}$$
 
 Note that the Euclidean Algorithm finds $$GCD(a,b)$$ in at most $$\log(a)$$ divisions.
 
-#### [The Multiplicative Group $$(\mathbb{Z}/N\mathbb{Z})$$](https://people.reed.edu/~jerry/361/lectures/lec07.pdf)
+#### [Euler's Totient Function](https://en.wikipedia.org/wiki/Euler%27s_totient_function)
+
+In number theory, Euler's totient function ($$\varphi$$) counts the the number of positive integers $$k \leq n$$ such that $$\gcd(k,n) = 1$$
+
+#### [The Multiplicative Group $$(\mathbb{Z}/N\mathbb{Z})^{\times}$$](https://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n)
+
+In modular arithmetic, the integers coprime (relatively prime) to n from the set { $$0 , 1 , \ldots , n − 1 $$} of $$n$$ non-negative integers form a group under multiplication modulo $$n$$, called the multiplicative group of integers modulo $$n$$ or denoted by the ring $$(\mathbb{Z}/N\mathbb{Z})^{\times}$$. 
+
+Note, that the [order](https://en.wikipedia.org/wiki/Order_(group_theory)) of this group is defined by the earlier stated Euler's Totient Function ($$\varphi(n)$$). This means that in any finite order group $$G$$, the order of an element $$g \in G$$ is the smallest integer $$r$$ such that $$g^r=e$$, where $$e$$ denotes the identity element of the group. 
+
+Additionally, for some $$a$$ in the group, the multiplicative inverse of $$a$$ modulo $$n$$ is given by $$x \in Z$$ satisfying $$ax \equiv 1 \pmod{n}$$. It exists precisely when $$\gcd(a,n)=1$$ (a is coprime to n) and by [Bezout's Lemma](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_lemma) which states that there are $$x,y \in Z$$, such that $$ax+ny=0$$, we can easily show x is coprime to n. It follows that the multiplicative inverse belongs to the group.
+
+## The Algorithm and the Quantum Circuit
+
+Let us begin with some $$N$$ that isn't a prime power, prime number or even as previously defined. Firstly, we pick some integer $$1 < a <N$$. Then we check the trivial case where $$\gcd(a,N)$$ could be a nontrivial divisor of $$N$$. If this produces a divisor then obviously $$P=gcd(a,N)$$ and $$Q=\frac{N}{\gcd(a,N)}$$. If this case isn't satisfied then we move on with the algorithm.
+
+We know that if this case wasn't satisfied $$\gcd(a,N)=1$$ and so $$a$$ is contained in the multiplicative group of integers modulo $$N$$ defined by the ring $$(\mathbb{Z}/N\mathbb{Z})^{\times}$$. This means that $$a$$ has a multiplicative inverse modulo $$N$$. Thus, $$a$$ has a multiplicative order $$r$$ modulo $$N$$.
+
+Consider the infinite sequence of powers in a group $$G=(\mathbb{Z}/N\mathbb{Z})^{\times}$$:
+
+$$a,a^2,a^3 \ldots $$
+
+Since $$G$$, only has $$\lvert G \rvert$$ elements, by the pigeonhole principle we know that two of these powers must coincide to give
+
+$$a^i = a^j \quad (i<j)$$
+
+Multiplying on the left by the inverse of $$a^i$$ gives
+
+$$a^{j-i}=1$$
+
+So, there exists some positive integer $$r=j-i$$ with
+
+$$ a^r \equiv 1\pmod{N}$$
+
+The smallest such $$r$$ is known as the multiplicative order of a in the group $$G$$. Hence, a has a multiplicative order $$r$$ modulo $$N$$ in the group where $$ a^r \equiv 1\pmod{N}$$.
+
+Let's try out an example here. Consider $$a=2$$ and $$N=9$$,
+
+$$
+\begin{aligned}
+2^0 \equiv 1 \pmod{9} \qquad & 2^7 \equiv 2 \pmod{9} \qquad \\
+2^1 \equiv 2 \pmod{9} \qquad & 2^8 \equiv 4 \pmod{9} \qquad \\
+2^2 \equiv 4 \pmod{9} \qquad & 2^9 \equiv 8 \pmod{9} \qquad \\
+2^3 \equiv 8 \pmod{9} \qquad & 2^{10} \equiv 7 \pmod{9} \qquad \\
+2^4 \equiv 7 \pmod{9} \qquad & 2^{11} \equiv 5 \pmod{9} \qquad \\
+2^5 \equiv 5 \pmod{9} \qquad & 2^{12} \equiv 1 \pmod{9} \qquad \\
+2^6 \equiv 1 \pmod{9} \qquad & \ldots
+\end{aligned}
+$$
+
+We notice a really cool pattern here! Notice that 1, 2, 4, 8, 7, 5 are repeating. Hence, we can say that the order of 2 modulo 9 is 6. 
+
+
+This is where the quantum part comes in! We use the quantum subroutine to find $$r$$. Quantum computers speed up this part of the algorithm exponentially making this algorithm much more efficient than classical methods.
+
+We rewrite the definition of multiplicative order to get
+
+$$N \mid a^r-1$$
+
+Factoring we get
+
+$$N \mid (a^{r/2}-1)(a^{r/2}+1)$$
+
+Here, we must note that the algorithm doesn't work for an odd $$r$$ because the power $$\frac{r}{2}$$ must be an integer. This would mean that the algorithm would have to start again using another value of $$a$$.
+
+Hence, based on the previous criteria we assume that $$r$$ is an even integer. Let's claim that $$N \mid (a^{r/2}-1)$$. But then, $$a^{r/2} \equiv 1 \pmod{N}$$, which would imply that there exists a smaller multiplicative order than $$r$$, since $$r/2 <r$$. But, we already know that $$r$$ is the smallest possible multiplicative order for $$a$$. Hence, the claim that $$N \mid (a^{r/2}-1)$$ can't be true.
+
+This leaves us with two cases. Either $$N \mid (a^{r/2}+1)$$ or not.
+
 
 
