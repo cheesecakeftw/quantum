@@ -38,8 +38,21 @@ $$
 
 Note that, the $$\frac{1}{\sqrt{N}}$$ is a normalization constant so that the magnitude of the quantum vectors stays unitary. Also, note that we can connect the fraction $$\frac{2\pi i}{N}$$ to something we commonly know as the N-th [root of unity](https://en.wikipedia.org/wiki/Root_of_unity).
 
+The quantum Fourier transform can also be represented as a unitary matrix defined by F which is the DFT matrix
 
-Using this definition of the Fourier Transform lets try to derive the Quantum Fourier transform for some N!
+$$
+F_N = \frac{1}{\sqrt{N}}
+\begin{pmatrix}
+1 & 1 & 1 & 1 & \cdots & 1 \\
+1 & \omega & \omega^2 & \omega^3 & \cdots & \omega^{N-1} \\
+1 & \omega^2 & \omega^4 & \omega^6 & \cdots & \omega^{2(N-1)} \\
+1 & \omega^3 & \omega^6 & \omega^9 & \cdots & \omega^{3(N-1)} \\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & \omega^{N-1} & \omega^{2(N-1)} & \omega^{3(N-1)} & \cdots & \omega^{(N-1)(N-1)}
+\end{pmatrix}
+$$
+
+Using these definitions of the Fourier Transform lets expand the Quantum Fourier transform for some $$N$$!
 
 Firstly, lets define the state $$\mid x \rangle = \mid x_1 x_2 \ldots x_n\rangle$$, for $$N=2^n$$. We use n so that the Hilbert Space is exactly $$2^n$$ dimensional. A Hilbert Space is a vector space over the complex numbers. We use 2 as the base because you only have two complex coordinates, making the Hilbert Space for one qubit $$C^2$$. Then we can define 
 
@@ -174,7 +187,7 @@ $$
 
 which is what we derived earlier for the $$2^n$$ qubits state generalization.
 
-Let us now try applying the Quantum Fourier Transform to a 3 qubit state $$\mid \psi\rangle = \mid q_0q_1q_2\rangle$$. The circuit can be visualized as:
+Let us now apply the Quantum Fourier Transform to a 3 qubit state $$\mid \psi\rangle = \mid q_0q_1q_2\rangle$$. The circuit can be visualized as:
 
 <img 
   src="{{ "./Screenshot 2025-06-07 at 12.53.52 AM.png" | relative_url }}" 
@@ -251,12 +264,16 @@ $$
 QFT \mid x \rangle = \frac{1}{\sqrt{2^n}} \sum_{y=0}^{2^n - 1} e^{\frac{2\pi i x y}{2^n}} \mid y \rangle
 $$
 
-Lastly, let us consider the time complexity of the Quantum Fourier Transform. In the quantum circuit for the nn-qubit Fourier transform, each qubit $$k$$ (for $$k=1\ldots,n$$) is first acted on by a single Hadamard gate and then by a sequence of controlled-phase rotations controlled by that qubit and targeting each of the remaining $$(n−k)$$ qubits. Thus, qubit 1 requires one Hadamard plus (n−1)(n−1) controlled-phase gates, qubit 2 requires one Hadamard plus $$(n−2)$$ controlled-phase gates, and so on down to the last qubit, which needs only a Hadamard. Summing these gate we get
+Lastly, let us consider the time complexity of the Quantum Fourier Transform. In the quantum circuit for the $$n$$ qubit Fourier transform, each qubit $$k$$ (for $$k=1\ldots,n$$) is first acted on by a single Hadamard gate and then by a sequence of controlled-phase rotations controlled by that qubit and targeting each of the remaining $$(n−k)$$ qubits. Thus, qubit 1 requires one Hadamard plus $$ (n−1)$$ controlled-phase gates, qubit 2 requires one Hadamard plus $$(n−2)$$ controlled-phase gates, and so on down to the last qubit, which needs only a Hadamard. Summing these gate we get
 
 $$
 [1 + (n - 1)] + [1 + (n - 2)] + \cdots + [1 + 0] = n + (n - 1) + \cdots + 1 = \frac{n(n + 1)}{2} = O(n^2).
 $$
 
 This shows that the time complexity is proportional to $$n^2$$ which is a quadratic polynomial of the number of qubits. Since the time complexity of the QFT is in polynomial time it is a smaller time complexity than the classical Fourier transform which is exponential.
+
+Finally, we prove that the quantum fourier transform is unitary. This is a really important property that is used in various quantum algorithms.
+
+
 
 

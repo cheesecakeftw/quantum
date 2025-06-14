@@ -114,7 +114,14 @@ Here, we must note that the algorithm doesn't work for an odd $$r$$ because the 
 
 Hence, based on the previous criteria we assume that $$r$$ is an even integer. Let's claim that $$N \mid (a^{r/2}-1)$$. But then, $$a^{r/2} \equiv 1 \pmod{N}$$, which would imply that there exists a smaller multiplicative order than $$r$$, since $$r/2 <r$$. But, we already know that $$r$$ is the smallest possible multiplicative order for $$a$$. Hence, the claim that $$N \mid (a^{r/2}-1)$$ can't be true.
 
-This leaves us with two cases. Either $$N \mid (a^{r/2}+1)$$ or not.
+This leaves us with two cases. Either $$N \mid (a^{r/2}+1)$$ or not. If $$N$$ doesn't divide $$a^{r/2}+1$$ then we compute $$m=\gcd(N,a^{r/2}-1)$$. If $$m=1$$ then $$N\mid a^{r/2}+1$$ was true, in which case we can't find a nontrivial factor of $$N$$ from $$a$$ and we must restart with a new $$a$$. However, if $$m \neq 1$$ then we have found a nontrivial factor of $$N$$, where $$P=m$$ and $$Q=N/m$$. We could have also computed $$\gcd(N, a^{r/2} + 1)$$ since it might produce a nontrivial factor in cases where $$\gcd(N, a^{r/2} - 1)$$ does not, and it will be trivial precisely when $$N \mid a^{r/2} + 1$$.
 
+The probability of finding an $$a$$ that works is atleast $$\frac{1}{2}$$. Hence, we will always be able to find an $$a$$ that works after multiple attempts. But why is the bound $$\frac{1}{2}$$?
+
+
+
+Now that we have gone over the general logic of the algorithm let us move on to the quantum computing implementation.
+
+The main goal of the quantum subroutine is to find the order $$r$$ of $$a$$ modulo $$N$$ as described previously. Basically we need to find the smallest $$r$$ such that for $$\gcd(a,N)=1$$ where $$1<a<N$$ we have $$a^r \equiv \pmod{1}$$. 
 
 
