@@ -231,5 +231,23 @@ This is the circuit which we use to estimate the eigenvalue $$e^{2\pi i k/r}$$ f
 Since, $$
 \frac{1}{\sqrt{r}} \sum_{s=0}^{r-1} \mid u_k \rangle = \mid 1 \rangle$$ we are calculating the [eigenvector](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) for all of the $$\mid u_k \rangle$$ states. When measuring we only get the eigenvalue for one $$\mid u_k \rangle$$. We repeat the circuit until we get a nonzero eigenvalue.
 
-From the quantum circuit we get the value $$j=k/r$$. Then using the decimal value we apply the continued fraction algorithm to find integers $$a,b$$ where $$a/b$$ gives the best approximation for $$k/r$$ where $$a,b < N$$. The $$r$$ value that we approximate must be even so we keep going until we get an even one. Then we proceed with the mathematical aspects of the algorithm that we discussed earlier.
+From the quantum circuit we get the value $$j=k/r$$. Then using the decimal value we apply the continued fraction algorithm to find integers $$b,c$$ where $$b/c$$ gives the best approximation for $$k/r$$ where $$b,c < N$$. If the $$c$$ value that we approximate is odd or $$\gcd(b,c)>1$$, repeat the quantum subroutine. To recover the full order we could run the quantum subroutine an arbitrary amount of times to produce a list of fraction approximations
+
+ $$
+\frac{b_1}{c_1},\;\frac{b_2}{c_2},\;\dots,\;\frac{b_m}{c_m},
+$$ 
+
+where $$m$$ represents the number of times we ran the subroutine. Each $$c_k$$ will have different contributions because the circuit will most likely measure different possible values of $$j$$. Finally to get the order take 
+
+$$
+\mathrm{lcm}(c_1,c_2,\ldots, c_n)
+$$
+
+which will be the order of the original $$a$$ with a high probability. However, in practice a single run will most likely be enough.
+
+
+## The Math Behind the Continued Fractions 
+
+#### Theorem 1: 
+
 
