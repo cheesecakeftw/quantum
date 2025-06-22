@@ -274,6 +274,3 @@ This shows that the time complexity is proportional to $$n^2$$ which is a quadra
 
 Finally, we prove that the quantum fourier transform is unitary. This is a really important property that is used in various quantum algorithms.
 
-
-
-
