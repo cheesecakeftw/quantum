@@ -57,7 +57,7 @@ In modular arithmetic, the integers coprime (relatively prime) to n from the set
 
 Note, that the [order](https://en.wikipedia.org/wiki/Order_(group_theory)) of this group is defined by the earlier stated Euler's Totient Function ($$\varphi(n)$$). This means that in any finite order group $$G$$, the order of an element $$g \in G$$ is the smallest integer $$r$$ such that $$g^r=e$$, where $$e$$ denotes the identity element of the group. 
 
-Additionally, for some $$a$$ in the group, the multiplicative inverse of $$a$$ modulo $$n$$ is given by $$x \in Z$$ satisfying $$ax \equiv 1 \pmod{n}$$. It exists precisely when $$\gcd(a,n)=1$$ (a is coprime to n) and by [Bezout's Lemma](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_lemma) which states that there are $$x,y \in Z$$, such that $$ax+ny=0$$, we can easily show x is coprime to n. It follows that the multiplicative inverse belongs to the group.
+Additionally, for some $$a$$ in the group, the multiplicative inverse of $$a$$ modulo $$n$$ is given by $$x \in Z$$ satisfying $$ax \equiv 1 \pmod{n}$$. It exists precisely when $$\gcd(a,n)=1$$ (a is coprime to n) and by [Bezout's Lemma](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_lemma) which states that there are $$x,y \in Z$$, such that $$ax+ny=gcd(a,n)$$, we can easily show x is coprime to n. It follows that the multiplicative inverse belongs to the group.
 
 ## The Algorithm and the Quantum Circuit
 
@@ -118,7 +118,11 @@ This leaves us with two cases. Either $$N \mid (a^{r/2}+1)$$ or not. If $$N$$ do
 
 Now that we have gone over the logic of the algorithm let us move on to the quantum computing implementation.
 
-The main goal of the quantum subroutine is to find the order $$r$$ of $$a$$ modulo $$N$$ as described previously. Basically we need to find the smallest $$r$$ such that for $$\gcd(a,N)=1$$ where $$1<a<N$$ we have $$a^r \equiv \pmod{1}$$. 
+The main goal of the quantum subroutine is to find the order $$r$$ of $$a$$ modulo $$N$$ as described previously. Basically we need to find the smallest $$r$$ such that for $$\gcd(a,N)=1$$ where $$1<a<N$$ we have $$a^r \equiv 1\pmod{N}$$. 
+
+The quantum subroutine of this algorithm uses a quantum circuit with two registers. The second register uses $$n$$ qubits, where $$n$$ is the smallest integer such that $$N<2^n$$. The size of the first register determines how accurate the approximation of the circuit produces. We will show later that $$2n$$ qubits are enough to find $$r$$.
+
+The first register therefore has $$m=2n$$ qubits, giving it $$2^{m}=2^{2n}$$ computational basis states.
 
 Firstly lets define a gate $$U_{a,N} \mid x \rangle = \mid x a \mod(N)\rangle $$. This gate is a quantum phase estimation on the unitary operator. Below, you can see clearly how the [eigenstate](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) of $$U$$ might look like. QPE extracts the eigenvalue phase of a unitary operator.
 
@@ -231,7 +235,7 @@ This is the circuit which we use to estimate the eigenvalue $$e^{2\pi i k/r}$$ f
 Since, $$
 \frac{1}{\sqrt{r}} \sum_{s=0}^{r-1} \mid u_k \rangle = \mid 1 \rangle$$ we are calculating the [eigenvector](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) for all of the $$\mid u_k \rangle$$ states. When measuring we only get the eigenvalue for one $$\mid u_k \rangle$$. We repeat the circuit until we get a nonzero eigenvalue.
 
-From the quantum circuit we get the value $$j=k/r$$. Then using the decimal value we apply the continued fraction algorithm to find integers $$b,c$$ where $$b/c$$ gives the best approximation for $$k/r$$ where $$b,c < N$$. If the $$c$$ value that we approximate is odd or $$\gcd(b,c)>1$$, repeat the quantum subroutine. To recover the full order we could run the quantum subroutine an arbitrary amount of times to produce a list of fraction approximations
+From the quantum circuit we get the value $$j \approx 2^{2n} k/r$$ is divided by $$2^{2n}$$ to get a decimal value. Note that the $$2^{2n}$$ comes from fact that a register of $$2n$$ qubits spans exactly $$2^{2n}$$ orthogonal basis states, so after the inverse QFT the measured value naturally lies in the range $$0\ldots2^{2n}–1$$ and must be divided by $$2^{2n}$$ to produce the phase estimate.Then using the decimal value we apply the [continued fraction algorithm](https://en.wikipedia.org/wiki/Continued_fraction) to find integers $$b,c$$ where $$b/c$$ gives the best approximation for $$k/r$$ where $$b,c < N$$. If the $$c$$ value that we approximate is odd or $$\gcd(b,c)>1$$, repeat the quantum subroutine. To recover the full order we could run the quantum subroutine an arbitrary amount of times to produce a list of fraction approximations
 
  $$
 \frac{b_1}{c_1},\;\frac{b_2}{c_2},\;\dots,\;\frac{b_m}{c_m},
@@ -246,8 +250,71 @@ $$
 which will be the order of the original $$a$$ with a high probability. However, in practice a single run will most likely be enough.
 
 
-## The Math Behind the Continued Fractions 
+## The Math Behind the First register
 
-#### Theorem 1: 
+After performing the quantum phase estimation with a first register of 2n qubits (for an $$n$$-bit number $$N$$), we obtain an outcome that approximates the unknown phase $$\frac{k}{r}$$ to high precision. In particular, the measurement yields an integer $$j$$ (with $$0 \le j < 2^{2n}$$) such that $$j/2^{2n}$$ is extremely close to $$k/r$$. The reason we choose 2n qubits for the first register (hence working with $$2^{2n}$$ states) is to achieve this level of precision. In fact, with high probability the following bound holds for the difference between the true value $$k/r$$ and its estimate $$j/2^{2n}$$ after the quantum Fourier transform is measured:
 
+$$\lvert \frac{k}{r} - \frac{j}{2^{2n}} \rvert \;\le\; \frac{1}{2^{2n+1}}\,.$$
 
+This inequality is the mathematical expression of why $$2^{2n}$$ appears in phase estimation: the denominator $$2^{2n}$$ (the size of the Fourier space) determines the accuracy of the approximation. We can rewrite the bound in more illuminating terms. Note that $$2^{2n} = (2^n)^2 = N^2$$ where $$n = \lceil \log_2 N \rceil$$. Thus,
+
+$$\lvert \frac{k}{r} - \frac{j}{2^{2n}} \rvert \;\le\; \frac{1}{2^{2n+1}} \;=\; \frac{1}{2\,N^2}\,.$$
+
+Moreover, since the unknown denominator (the period) $$r$$ is at most on the order of $$N$$ (indeed we can assume $$r < N$$ for the hardest case), we have $$N^2 \ge r^2$$. This means $$\frac{1}{2N^2} \le \frac{1}{2r^2}$$, so the above implies
+
+$$\lvert \frac{k}{r} - \frac{j}{2^{2n}} \rvert \;\le\; \frac{1}{2\,r^2}\,.$$
+
+Theorem: Let $$k$$ and $$r$$ be positive $$n$$-bit integers and let $$\phi$$ satisfy  
+
+$$
+\left\lvert \phi - \frac{k}{r} \right\rvert \;\le\; \frac{1}{2\,r^{2}} .
+$$
+
+where $$\phi$$ specifically represents the phase estimate $$j/2^{2n}$$.
+
+Write $$d = \gcd(k,r)$$ and set  
+
+$$
+\frac{k_{0}}{r_{0}}
+  \;=\;
+\frac{\,k/d\,}{\,r/d\,}.
+$$
+
+Then the reduced fraction $$k_{0}/r_{0}$$ appears as a convergent in the
+continued-fraction expansion of $$\phi$$.
+Equivalently, running the continued-fraction algorithm on $$\phi$$
+recovers exactly the pair $$(k_{0},\,r_{0})$$.
+
+In other words, the measured fraction $$j/2^{2n}$$ approximates the true ratio $$k/r$$ within $$\frac{1}{2r^2}$$. This error is extremely small – so small that it essentially guarantees $$\frac{k}{r}$$ is the only rational number (with a reasonably bounded denominator) that could fit this approximation. Intuitively, if there were another distinct fraction with a smaller denominator that came equally close to the same value, it would violate fundamental results in Diophantine approximation theory. We now formalize this intuition in a theorem, which underpins the success of the continued-fraction method in Shor’s algorithm.
+
+Theorem: Let $$\phi$$ be a real number, and suppose $$\displaystyle \frac{s}{r}$$ (in lowest terms) is a rational number satisfying $$\displaystyle \lvert \frac{s}{r} - \phi\rvert \le \frac{1}{2N^2}$$ for some positive integer $$N$$. Then $$\displaystyle \frac{s}{r}$$ is the unique rational with denominator less than $$N$$ that lies within $$\frac{1}{2N^2}$$ of $$\phi$$.  In fact, if $$\frac{p}{q}$$ is any other rational satisfying $$\displaystyle \lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$ with $$q < N$$, it must hold that $$\displaystyle \frac{p}{q} = \frac{s}{r}$$.
+
+Proof 1:  Let $$\frac{p}{q}$$ be another rational number with $$q < N$$ that also satisfies $$\lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$. By the triangle inequality, the difference between $$p/q$$ and $$s/r$$ is bounded by
+
+$$\lvert \frac{p}{q} - \frac{s}{r}\rvert \;\le\; \lvert \frac{p}{q} - \phi\rvert + \lvert \phi - \frac{s}{r}\rvert \;\le\; \frac{1}{2N^2} + \frac{1}{2N^2} \;=\; \frac{1}{N^2}\,.$$
+
+Now express this difference with a common denominator:
+
+$$\lvert \frac{p}{q} - \frac{s}{r}\rvert \;=\; \frac{\lvert p r - s q\rvert}{q\,r}\,.$$
+
+The above inequality then gives $$\lvert p r - s q\rvert/(q r) \le \frac{1}{N^2}$$.  Since $$r < N$$ and $$q < N$$, we know $$q,r < N^2$$. It follows that
+
+$$ \lvert p r - s q\rvert \;\le\; \frac{q\,r}{N^2} \;\leq \; 1\,.$$
+
+But $$p r - s q$$ is an integer, so the only way it can have an absolute value less than 1 is if $$p r - s q = 0$$.  Hence $$p r = s q$$, which means $$\frac{p}{q} = \frac{s}{r}$$ as rational numbers (even if $$p\neq s$$ or $$q\neq r$$, they represent the same fraction). This proves that $$\frac{s}{r}$$ is the only rational with denominator smaller than $$N$$ satisfying the inequality.  Moreover, by the theory of continued fractions, each successive convergent to $$\phi$$ is strictly closer to $$\phi$$ than any approximation with a smaller denominator.  Therefore no fraction with denominator $$<N$$ other than $$s/r$$ can approximate $$\phi$$ this closely. This completes the first proof.  □
+
+Proof 2:  Write $$\displaystyle \frac{s}{r} = \frac{p_n}{q_n}$$ as a convergent of the continued fraction expansion of $$\phi$$, with $$p_n, q_n$$ coprime. (That is, $$p_n/q_n$$ is one of the convergents of $$\phi$$, so in particular $$q_n = r < N$$.) By the known error bound for convergents, we have
+
+$$\lvert \phi - \frac{p_n}{q_n}\rvert \;=\; \frac{1}{z_{n+1}q_n^2 + q_n/z_{n+2}}\,,$$
+
+where $$z_{n+1}, z_{n+2},\dots$$ are the partial quotients of $$\phi$$. (This formula comes from the recursive relation $$q_{n+1} = z_{n+1}q_n + q_{n-1}$$ for convergents.) Our assumption $$\lvert \frac{s}{r} - \phi\rvert \le \frac{1}{2N^2}$$ then implies
+
+$$\frac{1}{z_{n+1}q_n^2 + \frac{q_n}{z_{n+2}}} \;\le\; \frac{1}{2N^2}\,.$$
+
+Rearranging this inequality yields
+
+$$q_n\!\Big(q_{n+1} + \frac{q_n}{\,z_{n+2}\!}\Big) \;=\; q_n\!\Big(z_{n+1}q_n + q_{n-1}\Big) \;\ge\; 2\,N^2.$$
+
+Since $$q_n < N$$, $$q_{n+1} > q_n$$, and every partial quotient $$z_i \ge 1$$, the above can only hold if $$q_{n+1} > N$$.  In other words, the *next* convergent after $$p_n/q_n$$ has a denominator exceeding $$N$$. This means $$p_n/q_n = s/r$$ was in fact the last convergent whose denominator was below $$N$$. No other distinct rational with denominator $$< N$$ can approximate $$\phi$$ as closely as $$s/r$$ does, for if there were another, it would contradict the fact that convergents are the best approximations. This completes the second proof. □
+
+Hence, we have shown that if a measured value $$j/2^{2n}$$ is within $$1/(2N^2)$$ of some rational $$s/r$$ (with $$r < N$$), then $$s/r$$ is uniquely determined — no other rational with a smaller denominator could fit that criterion. In the context of the algorithm, this assures us that the fraction $$\frac{k}{r}$$ will be identified correctly by the continued fraction algorithm applied to $$j/2^{2n}$$. In practice, one simply computes the continued fraction expansion of $$j/2^{2n}$$ and finds the convergent with denominator $$\le N$$; by the above reasoning, that convergent must equal $$k/r$$. Thus, by choosing a first quantum register of size $$2n$$ (ensuring the denominator $$2^{2n} = N^2$$ in the phase estimation output), we guarantee that the classical post processing can reliably recover the period $$r$$ from the measured data. This is the mathematical insight behind the first quantum register’s role in Shor’s algorithm, completing our understanding of how the algorithm succeeds in finding the period. 
