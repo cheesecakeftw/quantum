@@ -49,7 +49,7 @@ Note that the Euclidean Algorithm finds $$GCD(a,b)$$ in at most $$\log(a)$$ divi
 
 #### [Euler's Totient Function](https://en.wikipedia.org/wiki/Euler%27s_totient_function)
 
-In number theory, Euler's totient function ($$\varphi$$) counts the the number of positive integers $$k \leq n$$ such that $$\gcd(k,n) = 1$$
+In number theory, Euler's totient function ($$\varphi$$) counts the number of positive integers $$k \leq n$$ such that $$\gcd(k,n) = 1$$
 
 #### [The Multiplicative Group $$(\mathbb{Z}/N\mathbb{Z})^{\times}$$](https://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n)
 
@@ -97,7 +97,7 @@ $$
 \end{aligned}
 $$
 
-We notice a really cool pattern here! Notice that 1, 2, 4, 8, 7, 5 are repeating. Hence, we can say that the order of 2 modulo 9 is 6. 
+We notice a really cool pattern here! Notice that the residues 1, 2, 4, 8, 7, 5 are repeating. Hence, we can say that the order of 2 modulo 9 is 6. 
 
 
 This is where the quantum part comes in! We use the quantum subroutine to find $$r$$. Quantum computers speed up this part of the algorithm exponentially making this algorithm much more efficient than classical methods.
@@ -126,7 +126,7 @@ The first register therefore has $$m=2n$$ qubits, giving it $$2^{m}=2^{2n}$$ com
 
 Firstly lets define a gate $$U_{a,N} \mid x \rangle = \mid x a \mod(N)\rangle $$. This gate is a quantum phase estimation on the unitary operator. Below, you can see clearly how the [eigenstate](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) of $$U$$ might look like. QPE extracts the eigenvalue phase of a unitary operator.
 
-If we apply this gate multiple times we one state multiple times we get $$U^0_{a,N} \mid 1 \rangle = \mid 1 \mod(N)\rangle $$, $$U^1_{a,N} \mid 1 \rangle = \mid a \mod(N)\rangle $$, $$U^2_{a,N} \mid 1\rangle = \mid a^2 \mod(N)\rangle $$, $$U^3_{a,N} \mid 1 \rangle = \mid a^3 \mod(N)\rangle $$ $$\ldots$$ $$U^r_{a,N} \mid 1 \rangle = \mid a^r \mod(N)\rangle $$. Note that at the final stage $$U^r_{a,N} \mid 1 \rangle = \mid a^r \mod(N)\rangle = \mid 1 \mod(N) \rangle$$. For the rest of our discussion we define $$U_{a,N}$$ as $$U$$ for clarity.
+If we apply this gate multiple times we get $$U^0_{a,N} \mid 1 \rangle = \mid 1 \mod(N)\rangle $$, $$U^1_{a,N} \mid 1 \rangle = \mid a \mod(N)\rangle $$, $$U^2_{a,N} \mid 1\rangle = \mid a^2 \mod(N)\rangle $$, $$U^3_{a,N} \mid 1 \rangle = \mid a^3 \mod(N)\rangle $$ $$\ldots$$ $$U^r_{a,N} \mid 1 \rangle = \mid a^r \mod(N)\rangle $$. Note that at the final stage $$U^r_{a,N} \mid 1 \rangle = \mid a^r \mod(N)\rangle = \mid 1 \mod(N) \rangle$$. For the rest of our discussion we define $$U_{a,N}$$ as $$U$$ for clarity.
 
 Now consider the state
 
@@ -235,7 +235,16 @@ This is the circuit which we use to estimate the eigenvalue $$e^{2\pi i k/r}$$ f
 Since, $$
 \frac{1}{\sqrt{r}} \sum_{s=0}^{r-1} \mid u_k \rangle = \mid 1 \rangle$$ we are calculating the [eigenvector](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) for all of the $$\mid u_k \rangle$$ states. When measuring we only get the eigenvalue for one $$\mid u_k \rangle$$. We repeat the circuit until we get a nonzero eigenvalue.
 
-From the quantum circuit we get the value $$j \approx 2^{2n} k/r$$ is divided by $$2^{2n}$$ to get a decimal value. Note that the $$2^{2n}$$ comes from fact that a register of $$2n$$ qubits spans exactly $$2^{2n}$$ orthogonal basis states, so after the inverse QFT the measured value naturally lies in the range $$0\ldots2^{2n}–1$$ and must be divided by $$2^{2n}$$ to produce the phase estimate.Then using the decimal value we apply the [continued fraction algorithm](https://en.wikipedia.org/wiki/Continued_fraction) to find integers $$b,c$$ where $$b/c$$ gives the best approximation for $$k/r$$ where $$b,c < N$$. If the $$c$$ value that we approximate is odd or $$\gcd(b,c)>1$$, repeat the quantum subroutine. To recover the full order we could run the quantum subroutine an arbitrary amount of times to produce a list of fraction approximations
+From the quantum circuit we get the value $$j \approx 2^{2n} k/r$$ is divided by $$2^{2n}$$ to get a decimal value. Phase estimation returns an integer $$j$$ satisfying
+$$
+\Bigl\lvert \tfrac{k}{r} - \tfrac{j}{2^{2n}}\Bigr\rvert \;\le\;\tfrac1{2^{2n+1}}\,;
+$$
+hence we divide by $$2^{2n}$$ to obtain the phase estimate
+$$
+\frac{j}{2^{2n}}\,.
+$$
+
+Note that the $$2^{2n}$$ comes from fact that a register of $$2n$$ qubits spans exactly $$2^{2n}$$ orthogonal basis states, so after the inverse QFT the measured value naturally lies in the range $$0\ldots2^{2n}–1$$ and must be divided by $$2^{2n}$$ to produce the phase estimate.Then using the decimal value we apply the [continued fraction algorithm](https://en.wikipedia.org/wiki/Continued_fraction) to find integers $$b,c$$ where $$b/c$$ gives the best approximation for $$k/r$$ where $$b,c < N$$. If the $$c$$ value that we approximate is odd or $$\gcd(b,c)>1$$, repeat the quantum subroutine. To recover the full order we could run the quantum subroutine an arbitrary amount of times to produce a list of fraction approximations
 
  $$
 \frac{b_1}{c_1},\;\frac{b_2}{c_2},\;\dots,\;\frac{b_m}{c_m},
@@ -256,7 +265,7 @@ After performing the quantum phase estimation with a first register of 2n qubits
 
 $$\lvert \frac{k}{r} - \frac{j}{2^{2n}} \rvert \;\le\; \frac{1}{2^{2n+1}}\,.$$
 
-This inequality is the mathematical expression of why $$2^{2n}$$ appears in phase estimation: the denominator $$2^{2n}$$ (the size of the Fourier space) determines the accuracy of the approximation. We can rewrite the bound in more illuminating terms. Note that $$2^{2n} = (2^n)^2 = N^2$$ where $$n = \lceil \log_2 N \rceil$$. Thus,
+This inequality is the mathematical expression of why $$2^{2n}$$ appears in phase estimation: the denominator $$2^{2n}$$ (the size of the Fourier space) determines the accuracy of the approximation. We can rewrite the bound by noting that the phase estimation is accurate to $$k/r$$ within $$2n$$ bits. Note that $$2^{2n} = (2^n)^2 = N^2$$ where $$n = \lceil \log_2 N \rceil$$. Thus,
 
 $$\lvert \frac{k}{r} - \frac{j}{2^{2n}} \rvert \;\le\; \frac{1}{2^{2n+1}} \;=\; \frac{1}{2\,N^2}\,.$$
 
@@ -264,7 +273,7 @@ Moreover, since the unknown denominator (the period) $$r$$ is at most on the ord
 
 $$\lvert \frac{k}{r} - \frac{j}{2^{2n}} \rvert \;\le\; \frac{1}{2\,r^2}\,.$$
 
-Theorem: Let $$k$$ and $$r$$ be positive $$n$$-bit integers and let $$\phi$$ satisfy  
+Let $$k$$ and $$r$$ be positive $$n$$-bit integers and let $$\phi$$ satisfy  
 
 $$
 \left\lvert \phi - \frac{k}{r} \right\rvert \;\le\; \frac{1}{2\,r^{2}} .
@@ -280,16 +289,16 @@ $$
 \frac{\,k/d\,}{\,r/d\,}.
 $$
 
-Then the reduced fraction $$k_{0}/r_{0}$$ appears as a convergent in the
-continued-fraction expansion of $$\phi$$.
+Then the reduced fraction $$k_{0}/r_{0}$$ appears as a continued fraction approximation in the
+continued fraction expansion of $$\phi$$.
 Equivalently, running the continued-fraction algorithm on $$\phi$$
 recovers exactly the pair $$(k_{0},\,r_{0})$$.
 
-In other words, the measured fraction $$j/2^{2n}$$ approximates the true ratio $$k/r$$ within $$\frac{1}{2r^2}$$. This error is extremely small – so small that it essentially guarantees $$\frac{k}{r}$$ is the only rational number (with a reasonably bounded denominator) that could fit this approximation. Intuitively, if there were another distinct fraction with a smaller denominator that came equally close to the same value, it would violate fundamental results in Diophantine approximation theory. We now formalize this intuition in a theorem, which underpins the success of the continued-fraction method in Shor’s algorithm.
+In other words, the measured fraction $$j/2^{2n}$$ approximates the true ratio $$k/r$$ within $$\frac{1}{2r^2}$$. This error is extremely small – so small that it essentially guarantees $$\frac{k}{r}$$ is the only rational number (with a reasonably bounded denominator) that could fit this approximation. 
 
-Theorem: Let $$\phi$$ be a real number, and suppose $$\displaystyle \frac{s}{r}$$ (in lowest terms) is a rational number satisfying $$\displaystyle \lvert \frac{s}{r} - \phi\rvert \le \frac{1}{2N^2}$$ for some positive integer $$N$$. Then $$\displaystyle \frac{s}{r}$$ is the unique rational with denominator less than $$N$$ that lies within $$\frac{1}{2N^2}$$ of $$\phi$$.  In fact, if $$\frac{p}{q}$$ is any other rational satisfying $$\displaystyle \lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$ with $$q < N$$, it must hold that $$\displaystyle \frac{p}{q} = \frac{s}{r}$$.
+**Theorem**: Let $$\phi$$ be a real number, and suppose $$ \frac{s}{r}$$ (in lowest terms) is a rational number satisfying $$ \lvert \frac{s}{r} - \phi\rvert \le \frac{1}{2N^2}$$ for some positive integer $$N$$. Then $$ \frac{s}{r}$$ is the unique rational with denominator less than $$N$$ that lies within $$\frac{1}{2N^2}$$ of $$\phi$$.  In fact, if $$\frac{p}{q}$$ is any other rational satisfying $$ \lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$ with $$q < N$$, it must hold that $$ \frac{p}{q} = \frac{s}{r}$$.
 
-Proof 1:  Let $$\frac{p}{q}$$ be another rational number with $$q < N$$ that also satisfies $$\lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$. By the triangle inequality, the difference between $$p/q$$ and $$s/r$$ is bounded by
+**Proof** :  Let $$\frac{p}{q}$$ be another rational number with $$q < N$$ that also satisfies $$\lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$. By the triangle inequality, the difference between $$p/q$$ and $$s/r$$ is bounded by
 
 $$\lvert \frac{p}{q} - \frac{s}{r}\rvert \;\le\; \lvert \frac{p}{q} - \phi\rvert + \lvert \phi - \frac{s}{r}\rvert \;\le\; \frac{1}{2N^2} + \frac{1}{2N^2} \;=\; \frac{1}{N^2}\,.$$
 
@@ -301,13 +310,13 @@ The above inequality then gives $$\lvert p r - s q\rvert/(q r) \le \frac{1}{N^2}
 
 $$ \lvert p r - s q\rvert \;\le\; \frac{q\,r}{N^2} \;\leq \; 1\,.$$
 
-But $$p r - s q$$ is an integer, so the only way it can have an absolute value less than 1 is if $$p r - s q = 0$$.  Hence $$p r = s q$$, which means $$\frac{p}{q} = \frac{s}{r}$$ as rational numbers (even if $$p\neq s$$ or $$q\neq r$$, they represent the same fraction). This proves that $$\frac{s}{r}$$ is the only rational with denominator smaller than $$N$$ satisfying the inequality.  Moreover, by the theory of continued fractions, each successive convergent to $$\phi$$ is strictly closer to $$\phi$$ than any approximation with a smaller denominator.  Therefore no fraction with denominator $$<N$$ other than $$s/r$$ can approximate $$\phi$$ this closely. This completes the first proof.  □
+But $$p r - s q$$ is an integer, so the only way it can have an absolute value less than 1 is if $$p r - s q = 0$$.  Hence $$p r = s q$$, which means $$\frac{p}{q} = \frac{s}{r}$$ as rational numbers (even if $$p\neq s$$ or $$q\neq r$$, they represent the same fraction). This proves that $$\frac{s}{r}$$ is the only rational with denominator smaller than $$N$$ satisfying the inequality.  Moreover, by the theory of continued fractions, each successive continued fraction approximation to $$\phi$$ is strictly closer to $$\phi$$ than any approximation with a smaller denominator.  Therefore no fraction with denominator $$<N$$ other than $$s/r$$ can approximate $$\phi$$ this closely.
 
-Proof 2:  Write $$\displaystyle \frac{s}{r} = \frac{p_n}{q_n}$$ as a convergent of the continued fraction expansion of $$\phi$$, with $$p_n, q_n$$ coprime. (That is, $$p_n/q_n$$ is one of the convergents of $$\phi$$, so in particular $$q_n = r < N$$.) By the known error bound for convergents, we have
+Now, write $$ \frac{s}{r} = \frac{p_n}{q_n}$$ as a continued fraction approximation of the continued fraction expansion of $$\phi$$, with $$p_n, q_n$$ coprime. (That is, $$p_n/q_n$$ is one of the terms converging to $$\phi$$, so in particular $$q_n = r < N$$.) By the known error bound for converging terms, we have
 
 $$\lvert \phi - \frac{p_n}{q_n}\rvert \;=\; \frac{1}{z_{n+1}q_n^2 + q_n/z_{n+2}}\,,$$
 
-where $$z_{n+1}, z_{n+2},\dots$$ are the partial quotients of $$\phi$$. (This formula comes from the recursive relation $$q_{n+1} = z_{n+1}q_n + q_{n-1}$$ for convergents.) Our assumption $$\lvert \frac{s}{r} - \phi\rvert \le \frac{1}{2N^2}$$ then implies
+where $$z_{n+1}, z_{n+2},\dots$$ are the partial quotients of $$\phi$$. (This formula comes from the recursive relation $$q_{n+1} = z_{n+1}q_n + q_{n-1}$$ for converging terms.) Our assumption $$\lvert \frac{s}{r} - \phi\rvert \le \frac{1}{2N^2}$$ then implies
 
 $$\frac{1}{z_{n+1}q_n^2 + \frac{q_n}{z_{n+2}}} \;\le\; \frac{1}{2N^2}\,.$$
 
@@ -315,6 +324,9 @@ Rearranging this inequality yields
 
 $$q_n\!\Big(q_{n+1} + \frac{q_n}{\,z_{n+2}\!}\Big) \;=\; q_n\!\Big(z_{n+1}q_n + q_{n-1}\Big) \;\ge\; 2\,N^2.$$
 
-Since $$q_n < N$$, $$q_{n+1} > q_n$$, and every partial quotient $$z_i \ge 1$$, the above can only hold if $$q_{n+1} > N$$.  In other words, the *next* convergent after $$p_n/q_n$$ has a denominator exceeding $$N$$. This means $$p_n/q_n = s/r$$ was in fact the last convergent whose denominator was below $$N$$. No other distinct rational with denominator $$< N$$ can approximate $$\phi$$ as closely as $$s/r$$ does, for if there were another, it would contradict the fact that convergents are the best approximations. This completes the second proof. □
+Since $$q_n < N$$, $$q_{n+1} > q_n$$, and every partial quotient $$z_i \ge 1$$, the above can only hold if $$q_{n+1} > N$$.  In other words, the *next* continued fraction approximation after $$p_n/q_n$$ has a denominator exceeding $$N$$. This means $$p_n/q_n = s/r$$ was in fact the last continued fraction approximation whose denominator was below $$N$$. No other distinct rational with denominator $$< N$$ can approximate $$\phi$$ as closely as $$s/r$$ does, for if there were another, it would contradict the fact that converging terms are the best approximations. $$\square$$
 
-Hence, we have shown that if a measured value $$j/2^{2n}$$ is within $$1/(2N^2)$$ of some rational $$s/r$$ (with $$r < N$$), then $$s/r$$ is uniquely determined — no other rational with a smaller denominator could fit that criterion. In the context of the algorithm, this assures us that the fraction $$\frac{k}{r}$$ will be identified correctly by the continued fraction algorithm applied to $$j/2^{2n}$$. In practice, one simply computes the continued fraction expansion of $$j/2^{2n}$$ and finds the convergent with denominator $$\le N$$; by the above reasoning, that convergent must equal $$k/r$$. Thus, by choosing a first quantum register of size $$2n$$ (ensuring the denominator $$2^{2n} = N^2$$ in the phase estimation output), we guarantee that the classical post processing can reliably recover the period $$r$$ from the measured data. This is the mathematical insight behind the first quantum register’s role in Shor’s algorithm, completing our understanding of how the algorithm succeeds in finding the period. 
+Hence, we have shown that if a measured value $$j/2^{2n}$$ is within $$1/(2N^2)$$ of some rational $$s/r$$ (with $$r < N$$), then $$s/r$$ is uniquely determined — no other rational with a smaller denominator could fit that criterion. In the context of the algorithm, this assures us that the fraction $$\frac{k}{r}$$ will be identified correctly by the continued fraction algorithm applied to $$j/2^{2n}$$. In practice, one simply computes the continued fraction expansion of $$j/2^{2n}$$ and finds the continued fraction approximation with denominator $$\le N$$; by the above reasoning, that continued fraction approximation must equal $$k/r$$. Thus, by choosing a first quantum register of size $$2n$$ (ensuring the denominator $$2^{2n} = N^2$$ in the phase estimation output), we guarantee that the classical post processing can reliably recover the period $$r$$ from the measured data. This is the mathematical insight behind the first quantum register’s role in Shor’s algorithm, completing our understanding of how the algorithm succeeds in finding the period. 
+
+## Implementing Shor's Algorithm
+

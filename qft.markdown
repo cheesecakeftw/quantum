@@ -274,3 +274,65 @@ This shows that the time complexity is proportional to $$n^2$$ which is a quadra
 
 Finally, we prove that the quantum fourier transform is unitary. This is a really important property that is used in various quantum algorithms.
 
+We define the Quantum Fourier Transform by
+
+$$
+F = \frac{1}{\sqrt{N}} \sum_{j,k=0}^{N-1}
+      e^{2\pi i\,jk/N}
+      \lvert k\rangle\langle j\rvert
+$$
+
+Its conjugate matrix is obtained by complex conjugation of the phase
+
+$$
+F^{\dagger} = \frac{1}{\sqrt{N}} \sum_{j,k=0}^{N-1}
+      e^{-2\pi i\,jk/N}
+      \lvert j\rangle\langle k\rvert
+$$
+
+To show that its unitarity we compute
+
+$$
+F^{\dagger}F
+= \frac{1}{N} \sum_{j,k=0}^{N-1} \sum_{j'=0}^{N-1}
+    e^{-2\pi i\,jk/N}
+    e^{2\pi i\,j'k/N}
+    \lvert j\rangle\langle j'\rvert
+$$
+
+Using the inner product property
+
+$$
+\langle k\vert k'\rangle = \delta_{k,k'}
+$$
+
+reduces the expression to
+
+$$
+F^{\dagger}F
+= \frac{1}{N} \sum_{j,j'=0}^{N-1} \sum_{k=0}^{N-1}
+    e^{2\pi i\,k(j'-j)/N}
+    \lvert j\rangle\langle j'\rvert
+$$
+
+For each pair $$j$$ and $$j'$$ the finite geometric sum obeys
+
+$$
+\frac{1}{N}\sum_{k=0}^{N-1} e^{2\pi i\,k(j'-j)/N}
+= \delta_{j',j}
+$$
+
+When $$j' = j$$ every term equals one the average equals one and when $$j' \neq j$$ the terms form a complete set of roots of unity whose sum equals zero.
+
+Substituting this result collapses the sums to
+
+$$
+F^{\dagger}F
+= \sum_{j,j'=0}^{N-1} \delta_{j',j}
+    \lvert j\rangle\langle j'\rvert
+= \sum_{j=0}^{N-1}
+    \lvert j\rangle\langle j\rvert
+= 1
+$$
+
+Therefore $$F^\dagger F$$ equals to 1 and $$F$$ is unitary.
