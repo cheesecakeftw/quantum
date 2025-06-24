@@ -46,7 +46,7 @@
   <div class="post-content e-content" itemprop="articleBody">
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
-<h2 id="introduction">Introduction:</h2>
+<h2 id="introduction">Introduction</h2>
 
 <p><a href="https://en.wikipedia.org/wiki/Shor%27s_algorithm">Shor’s Algorithm</a> is an algorithm used to find the prime factors of an integer. But why is this algorithm so famous in quantum computing? This algorithm has compelling applications such as cracking the most used encryption protocol, <a href="https://en.wikipedia.org/wiki/RSA_cryptosystem">RSA</a>, which functions on the assumption that the prime factors of an integer can’t be found. This algorithm has evidence of super-polynomial speedup compared to the best known classical algorithms. However, as of right now our quantum computers aren’t advanced enough to factor numbers of practical significance because of a lack of qubits. Also, the noise in quantum circuits requires additional qubits for quantum error correction adding to the impracticality of the algorithm right now.</p>
 
@@ -394,7 +394,22 @@ and then calculates the two greatest common divisors:
 
 <p>This is the last block of code which is the script’s entry and starts an AerSimulator. Here, we choose the number we desire to find the nontrivial factors of.</p>
 
-<p>Finally, let us go over a quick example. Consider \(n=15\) and \(a=14\).</p>
+<p>Finally, let us go over a quick example. Consider \(n=15\) and \(a=13\). Before we work the example by hand, we look at what the code outputs:</p>
+
+<p><img src="/code_screenshots/output.png" class="my-responsive-class" /></p>
+
+<p>There is a chance that the code could have given \(r=12\) due to the nature of the simplified quantum subroutine which is also fine because \(12\) is a multiple of \(4\). It is quite easy to classically find the smallest \(r\) once we have a candidate that works since it’s a multiple of the smallest \(r\).</p>
+
+<p>Now let us see how the algorithm works for \(N=15\) and \(a=13\). Note that \(\gcd(a,N)=1\) so \(a=13\) is a valid choice. Then we use the quantum subroutine to estimate \(r\) such that \(13^r \equiv 1 \pmod{15}\). Using the algorithm we find that \(r=4\). Then we calculate \(\gcd(13^{4/2}+1,15)\) and \(\gcd(13^{4/2}-1,15)\) which are \(\gcd(170,15)\) and \(\gcd(168,15)\) respectively. Evaluating the GCDs we get \(\gcd(170,15)=5\) and \(\gcd(168,15)=3\) Hence, the factors are \(5\) and \(3\) where \(15=5\times 3\). Hence, we found the factors using Shor’s Algorithm!</p>
+
+<p>To view the entire code with the reduced period function refer to <a href="https://github.com/cheesecakeftw/quantum/blob/main/Shor's_Algo.py">this link</a></p>
+
+<h2 id="limitations-of-the-algorithm">Limitations of the Algorithm</h2>
+
+<p>Although the algorithm runs in polynomial time, which is quite impressive, the degree of the polynomial is really high and for very large \(n\)’s the time complexity scales up really fast. The quantum subroutine in particular for the period finding and the modular exponentiation raise the time complexity harshly. Additionally, the algorithm requires an order of \(O(n^3 \log n)\) elementary gates and a large number of gates which rise dramatically as \(n\) increases.</p>
+
+<p>However, the main problem is the current quantum hardware. Quantum noise and <a href="https://en.wikipedia.org/wiki/Quantum_error_correction">error correction</a> are significant challenges in implementing Shor’s Algorithm. Because of the noisy nature of quantum computers they are prone to errors. Additionally, the algorithm itself requires a large number of bits to factorize large numbers which have 100’s of bits. Currently most of the best quantum computers have limited qubits and lack the power. Maintaining control over qubits is also another barrier that we must overcome. To implement Shor’s Algorithm we must maintain control over qubits to avoid errors.</p>
+
 
   </div><a class="u-url" href="/shor.html" hidden></a>
 </article>
