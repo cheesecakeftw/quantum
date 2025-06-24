@@ -9,7 +9,7 @@ title: The Math Behind Shor's Algorithm
 
 [Shor's Algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm) is an algorithm used to find the prime factors of an integer. But why is this algorithm so famous in quantum computing? This algorithm has compelling applications such as cracking the most used encryption protocol, [RSA](https://en.wikipedia.org/wiki/RSA_cryptosystem), which functions on the assumption that the prime factors of an integer can't be found. This algorithm has evidence of super-polynomial speedup compared to the best known classical algorithms. However, as of right now our quantum computers aren't advanced enough to factor numbers of practical significance because of a lack of qubits. Also, the noise in quantum circuits requires additional qubits for quantum error correction adding to the impracticality of the algorithm right now. 
 
-Before we get into the math behind the algorithm, lets discuss the time complexity of Shor's Algorithm. To factor an integer $$N$$ on a quantum computer, Shor's algorithm runs in polynomial time. To be specific, it takes quantum gates of order $$O((\log N)^2 (\log \log N)(\log \log \log N))$$ using fast multiplication. However, we can achieve  $$O((\log N)^2 (\log \log N))$$ using the asymptomatically fastest multiplication algorithm. These are both significantly faster time complexities than the most efficient classical factoring algorithm, the general number sieve, which works in exponential time $$ O( e^{1.9 (\log N)^{1/3} (\log \log N)^{2/3}})$$.
+Before we get into the math behind the algorithm, lets discuss the time complexity of Shor's Algorithm. To factor an integer $$N$$ on a quantum computer, Shor's algorithm runs in polynomial time. To be specific, it takes quantum gates of order $$O((\log N)^2 (\log \log N)(\log \log \log N))$$ using fast multiplication. However, we can achieve $$O((\log N)^2 (\log \log N))$$ using the asymptomatically fastest multiplication algorithm. These are both significantly faster time complexities than the most efficient classical factoring algorithm, the general number sieve, which works in exponential time $$ O( e^{1.9 (\log N)^{1/3} (\log \log N)^{2/3}})$$.
 
 It is important to note that this algorithm involves both classical and quantum parts. Specifically, the quantum speedup happens from the order-finding problem which we will explain and go into more detail about later.
 
@@ -25,7 +25,7 @@ If none of these easy cases produce a nontrivial factor of $$N$$ then we proceed
 
 #### [Basic Modular Arithmetic](https://en.wikipedia.org/wiki/Modular_arithmetic)
 
-For some $$a,b,r,N \in Z$$, we write $$a=b \times N +r$$. This can be written as $$a \equiv r \pmod{N}. $$ This can also be written as $$N \mid  (a-r)$$ which reads as "$$N$$ divides $$a-r$$".
+For some $$a,b,r,N \in Z$$, we write $$a=b \times N +r$$. This can be written as $$a \equiv r \pmod{N}. $$ This can also be written as $$N \mid (a-r)$$ which reads as "$$N$$ divides $$a-r$$".
 
 #### [Euclidean Algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm)
 
@@ -291,14 +291,13 @@ $$
 
 Then the reduced fraction $$k_{0}/r_{0}$$ appears as a continued fraction approximation in the
 continued fraction expansion of $$\phi$$.
-Equivalently, running the continued-fraction algorithm on $$\phi$$
-recovers exactly the pair $$(k_{0},\,r_{0})$$.
+Hence, the continued fractions algorithm will recover $$k $$ and $$r$$ (or with their greatest common divisor taken out). 
 
-In other words, the measured fraction $$j/2^{2n}$$ approximates the true ratio $$k/r$$ within $$\frac{1}{2r^2}$$. This error is extremely small – so small that it essentially guarantees $$\frac{k}{r}$$ is the only rational number (with a reasonably bounded denominator) that could fit this approximation. 
+In other words, the measured fraction $$j/2^{2n}$$ approximates the true ratio $$k/r$$ within $$\frac{1}{2r^2}$$. This error is extremely small: so small that it essentially guarantees $$\frac{k}{r}$$ is the only rational number (with a reasonably bounded denominator) that could fit this approximation. 
 
 **Theorem**: Let $$\phi$$ be a real number, and suppose $$ \frac{s}{r}$$ (in lowest terms) is a rational number satisfying $$ \lvert \frac{s}{r} - \phi\rvert \le \frac{1}{2N^2}$$ for some positive integer $$N$$. Then $$ \frac{s}{r}$$ is the unique rational with denominator less than $$N$$ that lies within $$\frac{1}{2N^2}$$ of $$\phi$$.  In fact, if $$\frac{p}{q}$$ is any other rational satisfying $$ \lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$ with $$q < N$$, it must hold that $$ \frac{p}{q} = \frac{s}{r}$$.
 
-**Proof** :  Let $$\frac{p}{q}$$ be another rational number with $$q < N$$ that also satisfies $$\lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$. By the triangle inequality, the difference between $$p/q$$ and $$s/r$$ is bounded by
+**Proof** : Let $$\frac{p}{q}$$ be another rational number with $$q < N$$ that also satisfies $$\lvert \frac{p}{q} - \phi\rvert \le \frac{1}{2N^2}$$. By the triangle inequality, the difference between $$p/q$$ and $$s/r$$ is bounded by
 
 $$\lvert \frac{p}{q} - \frac{s}{r}\rvert \;\le\; \lvert \frac{p}{q} - \phi\rvert + \lvert \phi - \frac{s}{r}\rvert \;\le\; \frac{1}{2N^2} + \frac{1}{2N^2} \;=\; \frac{1}{N^2}\,.$$
 
@@ -306,11 +305,11 @@ Now express this difference with a common denominator:
 
 $$\lvert \frac{p}{q} - \frac{s}{r}\rvert \;=\; \frac{\lvert p r - s q\rvert}{q\,r}\,.$$
 
-The above inequality then gives $$\lvert p r - s q\rvert/(q r) \le \frac{1}{N^2}$$.  Since $$r < N$$ and $$q < N$$, we know $$q,r < N^2$$. It follows that
+The above inequality then gives $$\lvert p r - s q\rvert/(q r) \le \frac{1}{N^2}$$. Since $$r < N$$ and $$q < N$$, we know $$q,r < N^2$$. It follows that
 
 $$ \lvert p r - s q\rvert \;\le\; \frac{q\,r}{N^2} \;\leq \; 1\,.$$
 
-But $$p r - s q$$ is an integer, so the only way it can have an absolute value less than 1 is if $$p r - s q = 0$$.  Hence $$p r = s q$$, which means $$\frac{p}{q} = \frac{s}{r}$$ as rational numbers (even if $$p\neq s$$ or $$q\neq r$$, they represent the same fraction). This proves that $$\frac{s}{r}$$ is the only rational with denominator smaller than $$N$$ satisfying the inequality.  Moreover, by the theory of continued fractions, each successive continued fraction approximation to $$\phi$$ is strictly closer to $$\phi$$ than any approximation with a smaller denominator.  Therefore no fraction with denominator $$<N$$ other than $$s/r$$ can approximate $$\phi$$ this closely.
+But $$p r - s q$$ is an integer, so the only way it can have an absolute value less than 1 is if $$p r - s q = 0$$. Hence $$p r = s q$$, which means $$\frac{p}{q} = \frac{s}{r}$$ as rational numbers (even if $$p\neq s$$ or $$q\neq r$$, they represent the same fraction). This proves that $$\frac{s}{r}$$ is the only rational with denominator smaller than $$N$$ satisfying the inequality. Additionally, by the theory of continued fractions each successive continued fraction approximation to $$\phi$$ is strictly closer to $$\phi$$ than any approximation with a smaller denominator. Therefore no fraction with denominator $$<N$$ other than $$s/r$$ can approximate $$\phi$$ this closely.
 
 Now, write $$ \frac{s}{r} = \frac{p_n}{q_n}$$ as a continued fraction approximation of the continued fraction expansion of $$\phi$$, with $$p_n, q_n$$ coprime. (That is, $$p_n/q_n$$ is one of the terms converging to $$\phi$$, so in particular $$q_n = r < N$$.) By the known error bound for converging terms, we have
 
@@ -326,21 +325,117 @@ $$q_n\!\Big(q_{n+1} + \frac{q_n}{\,z_{n+2}\!}\Big) \;=\; q_n\!\Big(z_{n+1}q_n + 
 
 Since $$q_n < N$$, $$q_{n+1} > q_n$$, and every partial quotient $$z_i \ge 1$$, the above can only hold if $$q_{n+1} > N$$.  In other words, the *next* continued fraction approximation after $$p_n/q_n$$ has a denominator exceeding $$N$$. This means $$p_n/q_n = s/r$$ was in fact the last continued fraction approximation whose denominator was below $$N$$. No other distinct rational with denominator $$< N$$ can approximate $$\phi$$ as closely as $$s/r$$ does, for if there were another, it would contradict the fact that converging terms are the best approximations. $$\square$$
 
-Hence, we have shown that if a measured value $$j/2^{2n}$$ is within $$1/(2N^2)$$ of some rational $$s/r$$ (with $$r < N$$), then $$s/r$$ is uniquely determined — no other rational with a smaller denominator could fit that criterion. In the context of the algorithm, this assures us that the fraction $$\frac{k}{r}$$ will be identified correctly by the continued fraction algorithm applied to $$j/2^{2n}$$. In practice, one simply computes the continued fraction expansion of $$j/2^{2n}$$ and finds the continued fraction approximation with denominator $$\le N$$; by the above reasoning, that continued fraction approximation must equal $$k/r$$. Thus, by choosing a first quantum register of size $$2n$$ (ensuring the denominator $$2^{2n} = N^2$$ in the phase estimation output), we guarantee that the classical post processing can reliably recover the period $$r$$ from the measured data. This is the mathematical insight behind the first quantum register’s role in Shor’s algorithm, completing our understanding of how the algorithm succeeds in finding the period. 
+Hence, we have shown that if a measured value $$j/2^{2n}$$ is within $$1/(2N^2)$$ of some rational $$s/r$$ (with $$r < N$$), then $$s/r$$ is uniquely determined — no other rational with a smaller denominator could fit that criterion. In the context of the algorithm, this assures us that the fraction $$\frac{k}{r}$$ will be identified correctly by the continued fraction algorithm applied to $$j/2^{2n}$$. 
+
+In practice, one simply computes the continued fraction expansion of $$j/2^{2n}$$ and finds the continued fraction approximation with denominator $$\le N$$; by the above reasoning, that continued fraction approximation must equal $$k/r$$. Thus, by choosing a first quantum register of size $$2n$$ (ensuring the denominator $$2^{2n} = N^2$$ in the phase estimation output), we guarantee that the classical post processing can recover the period $$r$$ from the measured data. 
 
 ## Implementing Shor's Algorithm
 
-We first import all the libraries that we will need to implement the algorithm using [IBM qiskit](https://www.ibm.com/quantum/qiskit).
+<img 
+  src="{{ "/code_screenshots/code1.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
 
-{% highlight ruby %}
-from qiskit import QuantumCircuit, transpile
-from qiskit.circuit.library import QFT
-from qiskit_aer import AerSimulator
-from fractions import Fraction
-import random
-import sympy
-import math
-{% endhighlight %}
+We start by importing all the libraries that we will need to implement the algorithm using [IBM qiskit](https://www.ibm.com/quantum/qiskit).
 
-We start with the controlled modular multiplication class for $$U(x)=a^x \mod N$$.
+<img 
+  src="{{ "/code_screenshots/code2.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
 
+We start with the controlled modular multiplication gate for
+$$U : \lvert x \rangle \mapsto \lvert a x \bmod N \rangle.$$
+Here, we build an $$n$$-qubit circuit (where $$n = \lceil \log_2 N \rceil$$) that carries out the map
+$$\lvert x \rangle \mapsto \lvert a^{2^j} x \bmod N \rangle$$
+for a particular exponent $$2^j$$. Basically the routine computes the binary pattern of each integer $$a^k \bmod N$$ (for $$0 \le k < 2^j$$) and applies the [Pauli X-gates](https://en.wikipedia.org/wiki/Quantum_logic_gate) to flip exactly those target register bits that are 1. 
+
+Then it uses SWAP gates to permute them into the correct positions: ensuring reversibility because the gate is unitary. Finally, we wrap the entire $$n$$-qubit block with .control() to make the multiplication execute only when its phase-estimation qubit is $$\lvert 1 \rangle$$, hence entangling the control register with the eigenphase of $$U$$.
+
+<img 
+  src="{{ "/code_screenshots/code3.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
+
+Now we move on to the qpe_circuit(a, N) function. This function constructs the entire Quantum Phase Estimation circuit for the unitary $$U_{a,N}$$. First, it allocates a control register of $$2n$$ qubits (where $$n = \lceil \log_2 N \rceil$$) and a target register of $$n$$ qubits. Then it applies the Hadamard gates to the control register to create an equal superposition. Additionally, it applies a Pauli X-gate to the least significant qubit of the target register to initialize it to $$\lvert 1 \rangle$$. We start with $$\lvert 1 \rangle$$ to get the sequence $$
+\lvert 1 \rangle, \lvert a \bmod N \rangle, \dots
+$$ which is the periodic behavior we want to see.
+
+Then we insert a barrier for clarity of code. Then the function iterates over each control-register qubit index $$j$$ and appends the controlled-$$U_{a,N}^{2^j}$$ gate with control on qubit $$j$$ and target on the entire target register. Lastly, it places another barrier.
+
+Finally, it applies the inverse Quantum Fourier Transform. We does this on the control register so that, upon measurement, the resulting bitstring $$j$$ has an estimate of the eigenphase $$2\pi k / r$$ as the fraction $$j / 2^{2n}$$. This is what we later post process to recover the period $$r$$.
+
+<img 
+  src="{{ "/code_screenshots/code4.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
+
+Now we look at the def measure(circ, simulator) function. The measure(circ, simulator) function first adds measurement operations on every qubit so their values are recorded in classical bits. Then we calls Qiskit’s transpiler to convert the circuit into the backend’s supported gate set and qubit layout. 
+
+After running the transpiled circuit, it returns the resulting bitstring (i.e. "01101"), which you can convert into an integer or individual bits. We later use that integer for the continued-fraction and postprocessing steps.
+
+<img 
+  src="{{ "/code_screenshots/code5.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
+
+After all of that quantum computing lets go over perhaps the easiest function: check_N(N). This function finds the values of $$N$$ for which Shor's algorithm isn't needed or simply wont work. We have already discussed these conditions try to recollect them!
+
+First, if $$N \le 3$$, it flags it as “invalid” because its too small to factor. If this case is true it returns (True, None). The second case is if $$N$$ is even, it immediately returns $$(\text{True}, (2, N // 2)),$$ since 2 is a trivial factor. The third case is when $$N$$ is prime in which it uses SymPy’s primality test to see if $$N$$ is prime. If it is it again returns (True, None) because there’s nothing to factor. Finally, it checks for prime power cases by trying exponents $$k$$ from $$\lfloor \log_2 N \rfloor$$ down to 2: if $$N = p^k$$ for some integer $$p$$. If the case is valid it returns $$(\text{True}, (p, k)),$$ giving the trivial factorization. 
+
+If none of these special cases apply, it returns (False, None). This is when we proceed with the full quantum subroutine.
+
+<img 
+  src="{{ "/code_screenshots/code6.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
+
+Now we address the most important function that is the backbone of the quantum subroutine of the algorithm: quantum_period_finding(N, simulator, a). This function uses quantum phase estimation to extract the candidate period $$r$$ for the multiplication-by-$$a$$ modulo $$N$$. 
+
+First, it computes $$n = \lceil \log_2 N \rceil,$$ as usual. Then it enters a loop where it builds the phase estimation circuit for $$U_{a,N}$$. After that it measures the control register to get a binary string, and converts that to an integer. Dividing by $$2^{2n}$$ yields an estimated phase $$\phi = \frac{\text{state_int}}{2^{2n}}.$$
+
+We then call Fraction($$\phi$$).limit_denominator(N) to find the fraction $$\frac{k}{r}$$ whose denominator $$r$$ is at most $$N$$. We showed how we find $$r$$ using the continued fraction algorithm
+
+$$
+\frac{k}{r} = a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2 + \cfrac{1}{\ddots + \cfrac{1}{a_n}}}}
+$$
+
+We also proved that we would find the fraction $$k/r$$ using the continued fraction algorithm and that a convergent $$p_m/q_m$$ with $$q_m\leq N$$ would give us the value of $$r$$ with a really high probability.
+
+If this $$r$$ is nontrivial and valid ($$1 < r \le N$$) the function returns the triple $$(r, \text{state_bin}, \phi)$$.
+However, if the value of $$r$$ isn't valid then it repeats, ignoring noisy or invalid estimates until a valid period emerges.
+
+<img 
+  src="{{ "/code_screenshots/code7.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
+
+Before we get to the main algorithm's function we discuss the *classical function* we use after we run the quantum subroutine:  postprocess(N, a, r). This function takes the calculated $$r$$ found by phase estimation and tries to turn that into nontrivial factors of $$N$$. 
+
+First, it checks if $$r$$ is odd. If it is odd then there is no integer $$r/2$$ and hence, the function returns None. If it is even then the function calculates $$x = a^{r/2} \bmod N$$
+and then calculates the two greatest common divisors:
+$$\gcd(x - 1, N)$$ and $$\gcd(x + 1,, N).$$
+
+
+If both of these GCDs are trivial (i.e. 1 or $$N$$ itself), which means that none of the GCDs were factors, we return None. We do this to signal that we must pick a different base $$a$$ and repeat the period finding subroutine. If one of the factors produced are nontrivial (which means they are a factor) they are returned through the tuple $$(x, x - 1, x + 1)$$ which we use in the main function.
+
+<img 
+  src="{{ "/code_screenshots/code8.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
+
+Finally, we get to the most important function in this implementation, the function that ties it all together: shor_algorithm(N, simulator=None). We begin by checking if $$N$$ is nontrivial: it isn't prime, small, even or a prime power. If any of those cases arise we return an error message because Shor's algorithm isn't optimal for any of those cases.
+
+If $$N$$ is nontrivial we proceed with Shor's Algorithm. Next we set up an AerSimulator and compute $$n = \lceil \log_2 N \rceil$$ to get the necessary number of bits for later definitions. Then we build up a list of integers $$a \in [2,N)$$ which are candidates for the base of the modular exponentiation. They must also satisfy the criteria that $$\gcd(a,N)=1$$. Then we shuffle the list at random. This allows us to iterate through the list and try out random $$a$$'s as bases.
+
+For each $$a$$ we call the quantum_period_finding function, which calls on the quantum phase estimation subroutine from within it. Through this function we get a tentative $$r$$ and then call the postprocess function to turn the period into actual factors. If $$r$$ is odd and none of the GCDs are nontrivial we skip this iteration and keep iterating until we get a nontrivial factor.
+
+Finally, when the algorithm see's a valid result we print out all the relevant data that might help us better understand how the algorithm works. However, in the case that no $$a$$ succeeds we print a failure message and return None.
+
+<img 
+  src="{{ "/code_screenshots/code9.png" | relative_url }}" 
+  class="my-responsive-class"
+/>
+
+This is the last block of code which is the script's entry and starts an AerSimulator. Here, we choose the number we desire to find the nontrivial factors of. 
+
+Finally, let us go over a quick example. Consider $$n=15$$ and $$a=14$$.
