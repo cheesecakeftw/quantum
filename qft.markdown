@@ -290,7 +290,7 @@ F^{\dagger} = \frac{1}{\sqrt{N}} \sum_{j,k=0}^{N-1}
       \lvert j\rangle\langle k\rvert
 $$
 
-To show that its unitarity we compute
+To show that its unitary we compute
 
 $$
 F^{\dagger}F

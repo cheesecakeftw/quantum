@@ -1,8 +1,6 @@
 title: Quantum Algorithms
 
 theme: minima
-plugins:
-  - jekyll-feed
 
 markdown: kramdown
 

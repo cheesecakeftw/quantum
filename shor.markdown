@@ -330,3 +330,17 @@ Hence, we have shown that if a measured value $$j/2^{2n}$$ is within $$1/(2N^2)$
 
 ## Implementing Shor's Algorithm
 
+We first import all the libraries that we will need to implement the algorithm using [IBM qiskit](https://www.ibm.com/quantum/qiskit).
+
+{% highlight ruby %}
+from qiskit import QuantumCircuit, transpile
+from qiskit.circuit.library import QFT
+from qiskit_aer import AerSimulator
+from fractions import Fraction
+import random
+import sympy
+import math
+{% endhighlight %}
+
+We start with the controlled modular multiplication class for $$U(x)=a^x \mod N$$.
+

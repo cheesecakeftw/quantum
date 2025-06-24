@@ -318,6 +318,18 @@ recovers exactly the pair \((k_{0},\,r_{0})\).</p>
 
 <h2 id="implementing-shors-algorithm">Implementing Shor’s Algorithm</h2>
 
+<p>We first import all the libraries that we will need to implement the algorithm using <a href="https://www.ibm.com/quantum/qiskit">IBM qiskit</a>.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">from</span> <span class="n">qiskit</span> <span class="n">import</span> <span class="no">QuantumCircuit</span><span class="p">,</span> <span class="n">transpile</span>
+<span class="n">from</span> <span class="n">qiskit</span><span class="p">.</span><span class="nf">circuit</span><span class="p">.</span><span class="nf">library</span> <span class="n">import</span> <span class="no">QFT</span>
+<span class="n">from</span> <span class="n">qiskit_aer</span> <span class="n">import</span> <span class="no">AerSimulator</span>
+<span class="n">from</span> <span class="n">fractions</span> <span class="n">import</span> <span class="no">Fraction</span>
+<span class="n">import</span> <span class="n">random</span>
+<span class="n">import</span> <span class="n">sympy</span>
+<span class="n">import</span> <span class="n">math</span></code></pre></figure>
+
+<p>We start with the controlled modular multiplication class for \(U(x)=a^x \mod N\).</p>
+
 
   </div><a class="u-url" href="/shor.html" hidden></a>
 </article>
