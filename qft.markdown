@@ -1,10 +1,8 @@
 ---
 layout: post
-title: Quantum Fourier Transforms
+title: Quantum Fourier Transform
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-
-## Introduction:
 
 
 The [Quantum Fourier Transform (QFT)](https://en.wikipedia.org/wiki/Quantum_Fourier_transform) transforms between the computational basis and the state in fourier basis. Here, the computational basis represents the Z-basis states $$ \mid 0 \rangle$$ and $$ \mid 1 \rangle$$ and the fourier basis represents the X-basis states $$ \mid + \rangle$$ and $$ \mid - \rangle$$. Now that we have talked about what the Quantum Fourier Transform is basically doing, lets get into the math.
