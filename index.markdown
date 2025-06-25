@@ -124,40 +124,40 @@ The quantum subroutine of this algorithm uses a quantum circuit with two registe
 
 The first register therefore has $$m=2n$$ qubits, giving it $$2^{m}=2^{2n}$$ computational basis states.
 
-Firstly lets define a gate $$U_{a,N} \mid x \rangle = \mid x a \mod(N)\rangle $$. This gate is a quantum phase estimation on the unitary operator. Below, you can see clearly how the [eigenstate](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) of $$U$$ might look like. QPE extracts the eigenvalue phase of a unitary operator.
+Firstly lets define a gate $$U_{a,N} \lvert x \rangle = \lvert x a \pmod{N}\rangle $$. This gate is a quantum phase estimation on the unitary operator. Below, you can see clearly how the [eigenstate](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) of $$U$$ might look like. QPE extracts the eigenvalue phase of a unitary operator.
 
-If we apply this gate multiple times we get $$U^0_{a,N} \mid 1 \rangle = \mid 1 \mod(N)\rangle $$, $$U^1_{a,N} \mid 1 \rangle = \mid a \mod(N)\rangle $$, $$U^2_{a,N} \mid 1\rangle = \mid a^2 \mod(N)\rangle $$, $$U^3_{a,N} \mid 1 \rangle = \mid a^3 \mod(N)\rangle $$ $$\ldots$$ $$U^r_{a,N} \mid 1 \rangle = \mid a^r \mod(N)\rangle $$. Note that at the final stage $$U^r_{a,N} \mid 1 \rangle = \mid a^r \mod(N)\rangle = \mid 1 \mod(N) \rangle$$. For the rest of our discussion we define $$U_{a,N}$$ as $$U$$ for clarity.
+If we apply this gate multiple times we get $$U^0_{a,N} \lvert 1 \rangle = \lvert 1 \mod(N)\rangle $$, $$U^1_{a,N} \lvert 1 \rangle = \lvert a \mod(N)\rangle $$, $$U^2_{a,N} \lvert 1\rangle = \lvert a^2 \mod(N)\rangle $$, $$U^3_{a,N} \lvert 1 \rangle = \lvert a^3 \mod(N)\rangle $$ $$\ldots$$ $$U^r_{a,N} \lvert 1 \rangle = \lvert a^r \mod(N)\rangle $$. Note that at the final stage $$U^r_{a,N} \lvert 1 \rangle = \lvert a^r \mod(N)\rangle = \lvert 1 \mod(N) \rangle$$. For the rest of our discussion we define $$U_{a,N}$$ as $$U$$ for clarity.
 
 Now consider the state
 
 $$
-\mid u_k \rangle = \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(0)/r} \mid a^0 \bmod (N) \rangle + e^{-2\pi i k(1)/r} \mid a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r-1)/r} \mid a^{r} \bmod (N) \rangle \right)
+\lvert u_k \rangle = \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(0)/r} \lvert a^0 \bmod (N) \rangle + e^{-2\pi i k(1)/r} \lvert a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r-1)/r} \lvert a^{r} \bmod (N) \rangle \right)
 $$ 
  
 If we apply the $$U$$ gate we get
 
 $$
-U \mid u_k \rangle = \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(0)/r} U \mid a^0 \bmod (N) \rangle + e^{-2\pi i k(1)/r} U \mid a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r-1)/r} U \mid a^{r} \bmod (N) \rangle \right)
+U \lvert u_k \rangle = \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(0)/r} U \lvert a^0 \bmod (N) \rangle + e^{-2\pi i k(1)/r} U \lvert a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r-1)/r} U \lvert a^{r} \bmod (N) \rangle \right)
 $$
 
 But, 
 
 $$
-\mid a^r \bmod (N) \rangle = \mid a^0 \bmod (N) \rangle = 1 \bmod (N)
+\lvert a^r \bmod (N) \rangle = \lvert a^0 \bmod (N) \rangle = 1 \bmod (N)
 $$. So we get
 
 $$
-U \mid u_k \rangle = \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(0)/r} U \mid a^0 \bmod (N) \rangle + e^{-2\pi i k(1)/r} U \mid a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r-1)/r} U \mid a^{0} \bmod (N) \rangle \right)
+U \lvert u_k \rangle = \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(0)/r} U \lvert a^0 \bmod (N) \rangle + e^{-2\pi i k(1)/r} U \lvert a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r-1)/r} U \lvert a^{0} \bmod (N) \rangle \right)
 $$
 
 Now we multiply the expression on the RHS by $$e^{2\pi i k/r} e^{-2\pi i k/r}$$
 
 $$
-U \mid u_k \rangle = e^{2\pi i k/r} e^{-2\pi i k/r} \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(0)/r} U \mid a^0 \bmod (N) \rangle + e^{-2\pi i k(1)/r} U \mid a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r-1)/r} U \mid a^{0} \bmod (N) \rangle \right)
+U \lvert u_k \rangle = e^{2\pi i k/r} e^{-2\pi i k/r} \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(0)/r} U \lvert a^0 \bmod (N) \rangle + e^{-2\pi i k(1)/r} U \lvert a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r-1)/r} U \lvert a^{0} \bmod (N) \rangle \right)
 $$
 
 $$
-= e^{2\pi i k/r} \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(1)/r} U \mid a^0 \bmod (N) \rangle + e^{-2\pi i k(2)/r} U \mid a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r)/r} U \mid a^{0} \bmod (N) \rangle \right)
+= e^{2\pi i k/r} \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(1)/r} U \lvert a^0 \bmod (N) \rangle + e^{-2\pi i k(2)/r} U \lvert a^1 \bmod (N) \rangle + \ldots + e^{-2\pi i k(r)/r} U \lvert a^{0} \bmod (N) \rangle \right)
 $$
 
 Since, $$e^{-2\pi i k}$$ is a root of unity, 
@@ -167,31 +167,31 @@ e^{-2\pi i k (r)/r} = 1
 $$
 
 $$
-U \mid u_k \rangle = e^{2\pi i k/r} \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(1)/r} U \mid a^0 \bmod (N) \rangle + e^{-2\pi i k(2)/r} U \mid a^1 \bmod (N) \rangle + \ldots + U \mid a^{0} \bmod (N) \rangle \right)
+U \lvert u_k \rangle = e^{2\pi i k/r} \frac{1}{\sqrt{r}} \left(e^{-2\pi i k(1)/r} U \lvert a^0 \bmod (N) \rangle + e^{-2\pi i k(2)/r} U \lvert a^1 \bmod (N) \rangle + \ldots + U \lvert a^{0} \bmod (N) \rangle \right)
 $$
 
 $$
-= e^{2\pi i k/r} \mid u_k \rangle
+= e^{2\pi i k/r} \lvert u_k \rangle
 $$
 
 
 Hence, $$U$$ has eigenstate $$u_k$$ with eigenvalues of the form $$e^{2\pi i k/r}$$, which fits naturally into the phase estimation framework. This means that if we can construct the $$u_k$$ state we can use the quantum phase estimation algorithm to get the value of $$k/r$$. Additionally, it turns out that it is far easier to construct the equal superposition of all the $$u_k$$ states because 
 
 $$
-\frac{1}{\sqrt{r}} \sum_{s=0}^{r-1} \mid u_k \rangle = \mid 1 \bmod N \rangle
+\frac{1}{\sqrt{r}} \sum_{s=0}^{r-1} \lvert u_k \rangle = \lvert 1 \bmod N \rangle
 $$
 
 
-To prove this we start with the definition of $$\mid u_k \rangle$$:
+To prove this we start with the definition of $$\lvert u_k \rangle$$:
 
 $$
-\mid u_k \rangle = \frac{1}{\sqrt{r}} \sum_{j=0}^{r-1} e^{-\frac{2\pi i k j}{r}} \mid a^j \bmod N \rangle
+\lvert u_k \rangle = \frac{1}{\sqrt{r}} \sum_{j=0}^{r-1} e^{-\frac{2\pi i k j}{r}} \lvert a^j \bmod N \rangle
 $$
 
 Summing over all $$k$$ from 0 to $$r-1$$, we get
 
 $$
-\frac{1}{\sqrt{r}} \sum_{k=0}^{r-1} \mid u_k \rangle = \frac{1}{\sqrt{r}} \sum_{k=0}^{r-1} \frac{1}{\sqrt{r}} \sum_{j=0}^{r-1} e^{-\frac{2\pi i k j}{r}} \mid a^j \bmod N \rangle = \frac{1}{r} \sum_{j=0}^{r-1} \sum_{k=0}^{r-1} e^{-\frac{2\pi i k j}{r}} \mid a^j \bmod N \rangle
+\frac{1}{\sqrt{r}} \sum_{k=0}^{r-1} \lvert u_k \rangle = \frac{1}{\sqrt{r}} \sum_{k=0}^{r-1} \frac{1}{\sqrt{r}} \sum_{j=0}^{r-1} e^{-\frac{2\pi i k j}{r}} \lvert a^j \bmod N \rangle = \frac{1}{r} \sum_{j=0}^{r-1} \sum_{k=0}^{r-1} e^{-\frac{2\pi i k j}{r}} \lvert a^j \bmod N \rangle
 $$
 
 Now consider the inner sum:
@@ -217,7 +217,7 @@ because $$\omega^r = e^{-2\pi i j} = 1$$.
 Thus only the $$j=0$$ term survives, giving
 
 $$
-\frac{1}{r} \cdot r \mid a^0 \bmod N \rangle = \mid 1 \bmod N \rangle
+\frac{1}{r} \cdot r \lvert a^0 \bmod N \rangle = \lvert 1 \bmod N \rangle
 $$
 
 which is the exact result we wanted to prove!
