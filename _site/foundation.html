@@ -52,7 +52,7 @@
 
 \[\mathbb{C}[\mathbb{Z}/2\mathbb{Z}] \cong \mathbb{C}^2 \cong {\alpha 0 + \beta 1 : \alpha, \beta \in \mathbb{C} }\]
 
-<p>A qubit can be thought of as a 2-dimensional complex vector, which is called a superposition state vector. Note that it has two fundamental states which are again \(0\) and \(1\).</p>
+<p>A qubit can be thought of as a 2-dimensional complex vector, which is called a superposition state vector. A qubit basically lives in the two-dimensional complex Hilbert space \(\mathbb{C}^2\), Note that it has two fundamental states which are again \(0\) and \(1\).</p>
 
 <p>But here is where qubits are different from bits. A state of a qubit is a unit vector in \(\mathbb{C}^2\) for the standard <a href="https://en.wikipedia.org/wiki/Inner_product_space">inner product</a> in \(\mathbb{C}^2\) which makes \(0\) and \(1\) an <a href="https://en.wikipedia.org/wiki/Orthonormality">orthonormal</a> basis. Two vectors in an inner space are called orthonormal if they are orthogonal unit vectors in linear algebra. A unit vector is a vector which has length 1 and orthogonal means that the vectors are perpendicular to each other.</p>
 
@@ -73,7 +73,7 @@
 \[\lvert 0 \rangle = \begin{bmatrix} 1 \\ 0 \end{bmatrix}, \quad
 \lvert 1 \rangle = \begin{bmatrix} 0 \\ 1 \end{bmatrix}.\]
 
-<p>We can define a superposition state vector in \(2^n\) dimensional Hilbert space using probability theory as</p>
+<p>Two qubits live in the tensor product space \(\mathbb{C}^2 \otimes \mathbb{C}^2 \cong \mathbb{C}^4\), whose standard basis is \(\lvert 00 \rangle, \lvert 01 \rangle, \lvert 10 \rangle, \lvert 11 \rangle\). In general, \(n\) qubits form the \(2^n\)-dimensional space \(\mathbb{C}^2 \otimes \cdots \otimes \mathbb{C}^2 \cong \mathbb{C}^{2^n}\) with basis \(\lvert j \rangle\) for \(j = 0, \dots, 2^n - 1\). Hence, We can define a superposition state vector in \(2^n\) dimensional Hilbert space using probability theory as</p>
 
 \[\lvert Y \rangle = \sum_{j=0}^{2^n - 1} x_j \lvert j \rangle\]
 
@@ -87,7 +87,125 @@
 
 <p>where \(\delta_{kj}\) is the kronecker delta: its \(1\) if \(k = j\) and \(0\) otherwise, so this just picks out the \(k\)th component from the whole state vector. Additionally, note that using the kronecker delta is essentially vector multiplication in the orthonormal state in linear algebra. The kronecker delta is essential in proofs that we use later!</p>
 
-<p>Now we define important gates that we use in another articles.</p>
+<p>Now we define important gates that we use in other articles. The Pauli gates are three matrices that we apply on a single qubit. The goal of each of these gates (\(X,Y,Z\)) is to rotate around the x,y and z axes of the <a href="https://en.wikipedia.org/wiki/Bloch_sphere">Bloch sphere</a> by \(\pi\) radians. Here, the sphere just refers to a geometric representation of the pure state space of a qubit. The north and south poles respectively correspond to the standard basis vectors \(\lvert 1 \rangle\) and  \(\lvert 0 \rangle\).</p>
+
+<p>The \(X\) gate is the quantum equivalent of the \(NOT\) gate for classical computers. It can be seen as a bit flip as it maps \(\lvert 1 \rangle\) to  \(\lvert 0 \rangle\) and \(\lvert 0 \rangle\) to \(\lvert 1 \rangle\). The gate is represented by the matrix</p>
+
+\[X = 
+\begin{bmatrix}
+0 &amp; 1 \\
+1 &amp; 0
+\end{bmatrix}\]
+
+<p>We can show that the gate maps \(\lvert 1 \rangle\to\lvert 0 \rangle\) and \(\lvert 0 \rangle\to\lvert 1 \rangle\) by applying the matrix on a qubit defined as \(\alpha\lvert0\rangle + \beta\lvert1\rangle\)</p>
+
+\[X(\alpha\lvert0\rangle + \beta\lvert1\rangle)
+= \alpha X\lvert0\rangle + \beta X\lvert1\rangle \\
+= \alpha\begin{pmatrix}0\\1\end{pmatrix} + \beta\begin{pmatrix}1\\0\end{pmatrix} \\
+= \alpha\begin{pmatrix}0\\1\end{pmatrix} + \beta\begin{pmatrix}1\\0\end{pmatrix} \\
+= \beta\lvert0\rangle + \alpha\lvert1\rangle\]
+
+<p>Similar, to the \(X\) gate the \(Y\) gate maps \(\lvert 0 \rangle\) to \(i\lvert 1 \rangle\) and \(\lvert 1 \rangle\) to \(-i\lvert 0 \rangle\). It is represented by the matrix</p>
+
+\[Y = 
+\begin{bmatrix}
+0 &amp; -i \\
+i &amp; 0
+\end{bmatrix}\]
+
+<p>We can show that the gate maps \(\lvert 0 \rangle \to i\lvert 1 \rangle\) and \(\lvert 1 \rangle \to -i\lvert 0 \rangle\) by applying the matrix on a qubit</p>
+
+\[Y(\alpha\lvert0\rangle + \beta\lvert1\rangle)
+= \alpha Y\lvert0\rangle + \beta Y\lvert1\rangle \\
+= \alpha\begin{pmatrix}0\\i\end{pmatrix} + \beta\begin{pmatrix}-i\\0\end{pmatrix} \\
+= \alpha\begin{pmatrix}0\\i\end{pmatrix} + \beta(-i)\begin{pmatrix}1\\0\end{pmatrix} \\
+= -i\beta\lvert0\rangle + i\alpha\lvert1\rangle\]
+
+<p>Finally, the \(Z\) gate leaves the basis state (\(\lvert 0 \rangle\)) unchanged and maps \(\lvert 1 \rangle\) to \(-\lvert 1 \rangle\). This gate is also called the phase flip gate sometimes. It is represented by the matrix</p>
+
+\[Z = 
+\begin{bmatrix}
+1 &amp; 0 \\
+0 &amp; -1
+\end{bmatrix}.\]
+
+<p>We can show that the gate maps  \(\lvert 1 \rangle \to-\lvert 1 \rangle\) by applying the matrix on a qubit</p>
+
+\[Z(\alpha\lvert0\rangle + \beta\lvert1\rangle)
+= \alpha Z\lvert0\rangle + \beta Z\lvert1\rangle \\
+= \alpha\begin{pmatrix}1\\0\end{pmatrix} + \beta\begin{pmatrix}0\\-1\end{pmatrix} \\
+= \alpha\begin{pmatrix}1\\0\end{pmatrix} + \beta(-1)\begin{pmatrix}0\\1\end{pmatrix} \\
+= \alpha\lvert0\rangle - \beta\lvert1\rangle\]
+
+<p>While, not specifically relevant to the other articles it is worth noting that the square of any Pauli matrix is the <a href="https://en.wikipedia.org/wiki/Identity_matrix">identity matrix</a>. Hence, we say that the Pauli matrices are <a href="https://en.wikipedia.org/wiki/Involutory_matrix">involutory</a>.</p>
+
+<p>We note that each Pauli matrix squared yields the identity matrix:</p>
+
+\[X^2 = 
+\begin{bmatrix}
+0 &amp; 1 \\
+1 &amp; 0
+\end{bmatrix}^2
+=
+\begin{bmatrix}
+0 &amp; 1 \\
+1 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+0 &amp; 1 \\
+1 &amp; 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &amp; 0 \\
+0 &amp; 1
+\end{bmatrix} = I\]
+
+\[Y^2 = 
+\begin{bmatrix}
+0 &amp; -i \\
+i &amp; 0
+\end{bmatrix}^2
+=
+\begin{bmatrix}
+0 &amp; -i \\
+i &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+0 &amp; -i \\
+i &amp; 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &amp; 0 \\
+0 &amp; 1
+\end{bmatrix} = I\]
+
+\[Z^2 = 
+\begin{bmatrix}
+1 &amp; 0 \\
+0 &amp; -1
+\end{bmatrix}^2
+=
+\begin{bmatrix}
+1 &amp; 0 \\
+0 &amp; -1
+\end{bmatrix}
+\begin{bmatrix}
+1 &amp; 0 \\
+0 &amp; -1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &amp; 0 \\
+0 &amp; 1
+\end{bmatrix} = I\]
+
+<p>Now we go over perhaps one of the most important gates in quantum computing: the Hadamard gate. This gate creates an equal superposition state if given a computational basis state. It maps the states \(\lvert 0 \rangle \mapsto \frac{\lvert 0 \rangle + \lvert 1 \rangle}{\sqrt{2}} \quad \text{and} \quad \lvert 1 \rangle \mapsto \frac{\lvert 0 \rangle - \lvert 1 \rangle}{\sqrt{2}}\). Two two states \((\lvert 0 \rangle + \lvert 1 \rangle)/\sqrt{2}\) and \((\lvert 0 \rangle - \lvert 1 \rangle)/\sqrt{2}\) are written as \(\lvert +\rangle\) and \(\lvert -\rangle\) respectively. We represent the Hadamard gate through the Hadamard matrix:</p>
+
+\[H = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 &amp; 1 \\ 1 &amp; -1 \end{bmatrix}.\]
+
+<p>Another important term that is crucial to understanding the quantum circuit behind Shor’s Algorithm is controlled gates. These are gates which act on 2 qubits or more, where one qubit acts as a control for some operation. For example, the \(CNOT\) (Controlled NOT) gate acts on 2 qubits, and performs the \(NOT\) operation on the second qubit iff the first qubit is \(\lvert 1\rangle\), and otherwise doesn’t do anything. Similarly we can define \(CZ,CX\) and the \(CY\) gate too!</p>
 
 
   </div><a class="u-url" href="/foundation.html" hidden></a>
