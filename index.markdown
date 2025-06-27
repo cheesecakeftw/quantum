@@ -1,6 +1,5 @@
 ---
 layout: home
-
 ---
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
@@ -311,7 +310,7 @@ $$ \lvert p r - s q\rvert \;\le\; \frac{q\,r}{N^2} \;\leq \; 1\,.$$
 
 But $$p r - s q$$ is an integer, so the only way it can have an absolute value less than 1 is if $$p r - s q = 0$$. Hence $$p r = s q$$, which means $$\frac{p}{q} = \frac{s}{r}$$ as rational numbers (even if $$p\neq s$$ or $$q\neq r$$, they represent the same fraction). This proves that $$\frac{s}{r}$$ is the only rational with denominator smaller than $$N$$ satisfying the inequality. Additionally, by the theory of continued fractions each successive continued fraction approximation to $$\phi$$ is strictly closer to $$\phi$$ than any approximation with a smaller denominator. Therefore no fraction with denominator $$<N$$ other than $$s/r$$ can approximate $$\phi$$ this closely.
 
-Now, write $$ \frac{s}{r} = \frac{p_n}{q_n}$$ as a continued fraction approximation of the continued fraction expansion of $$\phi$$, with $$p_n, q_n$$ coprime. (That is, $$p_n/q_n$$ is one of the terms converging to $$\phi$$, so in particular $$q_n = r < N$$.) By the known error bound for converging terms, we have
+Now, write $$ \frac{s}{r} = \frac{p_n}{q_n}$$ as a continued fraction approximation of the continued fraction expansion of $$\phi$$, with $$p_n, q_n$$ coprime. (That is, $$p_n/q_n$$ is one of the terms converging to $$\phi$$, so in particular $$q_n = r < N$$.) By the known [error bound](https://en.wikipedia.org/wiki/Approximation_error) for converging terms, we have
 
 $$\lvert \phi - \frac{p_n}{q_n}\rvert \;=\; \frac{1}{z_{n+1}q_n^2 + q_n/z_{n+2}}\,,$$
 
@@ -325,7 +324,7 @@ $$q_n\!\Big(q_{n+1} + \frac{q_n}{\,z_{n+2}\!}\Big) \;=\; q_n\!\Big(z_{n+1}q_n + 
 
 Since $$q_n < N$$, $$q_{n+1} > q_n$$, and every partial quotient $$z_i \ge 1$$, the above can only hold if $$q_{n+1} > N$$.  In other words, the *next* continued fraction approximation after $$p_n/q_n$$ has a denominator exceeding $$N$$. This means $$p_n/q_n = s/r$$ was in fact the last continued fraction approximation whose denominator was below $$N$$. No other distinct rational with denominator $$< N$$ can approximate $$\phi$$ as closely as $$s/r$$ does, for if there were another, it would contradict the fact that converging terms are the best approximations. $$\square$$
 
-Hence, we have shown that if a measured value $$j/2^{2n}$$ is within $$1/(2N^2)$$ of some rational $$s/r$$ (with $$r < N$$), then $$s/r$$ is uniquely determined — no other rational with a smaller denominator could fit that criterion. In the context of the algorithm, this assures us that the fraction $$\frac{k}{r}$$ will be identified correctly by the continued fraction algorithm applied to $$j/2^{2n}$$. 
+Hence, we have shown that if a measured value $$j/2^{2n}$$ is within $$1/(2N^2)$$ of some rational $$s/r$$ (with $$r < N$$), then $$s/r$$ is uniquely determined — no other rational with a smaller denominator could fit that criterion. In the context of the algorithm, this assures us that the fraction $$\frac{k}{r}$$ will be identified correctly by the [continued fraction algorithm](https://en.wikipedia.org/wiki/Continued_fraction) applied to $$j/2^{2n}$$. 
 
 In practice, one simply computes the continued fraction expansion of $$j/2^{2n}$$ and finds the continued fraction approximation with denominator $$\le N$$; by the above reasoning, that continued fraction approximation must equal $$k/r$$. Thus, by choosing a first quantum register of size $$2n$$ (ensuring the denominator $$2^{2n} = N^2$$ in the phase estimation output), we guarantee that the classical post processing can recover the period $$r$$ from the measured data. 
 
